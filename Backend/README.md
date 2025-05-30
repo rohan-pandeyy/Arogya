@@ -1,0 +1,136 @@
+# User API Documentation
+
+## Endpoints
+
+### Register User
+`POST /users/register`
+
+Creates a new user account in the system.
+
+#### Request Body
+```json
+{
+    "email": "string",
+    "password": "string",
+    "name": "string",
+    "age": "number",
+    "gender": "string"
+}
+```
+
+#### Example Request
+```json
+{
+    "email": "john.doe@example.com",
+    "password": "securepass123",
+    "name": "John Doe",
+    "age": 25,
+    "gender": "male"
+}
+```
+
+#### Field Requirements
+- `email`: Valid email address (must match pattern /.+\@.+\..+/)
+- `password`: Minimum 8 characters long
+- `name`: Between 3 and 30 characters long
+- `age`: Required number value
+- `gender`: Must be one of: "male", "female", "other"
+
+#### Validation Rules
+- Email must be unique in the system
+- Password must be at least 8 characters long
+- Name must be at least 3 characters long
+- All fields are required
+
+#### Response
+
+##### Success (201 Created)
+```json
+{
+    "token": "string",
+    "user": {
+        "email": "string",
+        "name": "string",
+        "age": "number",
+        "gender": "string",
+        "_id": "string",
+        "createdAt": "date",
+        "updatedAt": "date"
+    }
+}
+```
+
+##### Example Success Response
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWY0YzM5YzM5YzM5YzM5YzM5YzM5YzMiLCJpYXQiOjE3MDk5MjM0NTYsImV4cCI6MTcwOTkyNzA1Nn0.example",
+    "user": {
+        "email": "john.doe@example.com",
+        "name": "John Doe",
+        "age": 25,
+        "gender": "male",
+        "_id": "65f4c39c39c39c39c39c39c3",
+        "createdAt": "2024-03-08T12:34:56.789Z",
+        "updatedAt": "2024-03-08T12:34:56.789Z"
+    }
+}
+```
+
+##### Error (400 Bad Request)
+```json
+{
+    "errors": [
+        {
+            "msg": "string",
+            "param": "string",
+            "location": "string"
+        }
+    ]
+}
+```
+
+##### Example Error Responses
+
+1. Invalid Email Format:
+```json
+{
+    "errors": [
+        {
+            "msg": "Invalid email",
+            "param": "email",
+            "location": "body"
+        }
+    ]
+}
+```
+
+2. Password Too Short:
+```json
+{
+    "errors": [
+        {
+            "msg": "Password must be at least 8 characters long",
+            "param": "password",
+            "location": "body"
+        }
+    ]
+}
+```
+
+3. Missing Required Field:
+```json
+{
+    "errors": [
+        {
+            "msg": "All fields are required",
+            "param": "age",
+            "location": "body"
+        }
+    ]
+}
+```
+
+#### Notes
+- The response includes a JWT token that expires in 1 hour
+- The password is not included in the response
+- The user's socketId field is optional and not required for registration 
