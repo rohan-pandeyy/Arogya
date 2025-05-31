@@ -226,3 +226,107 @@ Authenticates a user and returns their information along with an authentication 
 - The password is not included in the response
 - Invalid credentials return a generic message for security reasons
 - The same validation rules for email and password apply as in registration 
+
+### Get User Profile
+`GET /users/profile`
+
+Retrieves the authenticated user's profile information.
+
+#### Authentication
+- Requires valid JWT token
+- Token can be sent either in:
+  - Cookie header as `token`
+  - Authorization header as `Bearer <token>`
+
+#### Response
+
+##### Success (200 OK)
+```json
+{
+    "email": "string",
+    "name": "string",
+    "age": "number",
+    "gender": "string",
+    "_id": "string",
+    "createdAt": "date",
+    "updatedAt": "date"
+}
+```
+
+##### Example Success Response
+```json
+{
+    "email": "john.doe@example.com",
+    "name": "John Doe",
+    "age": 25,
+    "gender": "male",
+    "_id": "65f4c39c39c39c39c39c39c3",
+    "createdAt": "2024-03-08T12:34:56.789Z",
+    "updatedAt": "2024-03-08T12:34:56.789Z"
+}
+```
+
+##### Error Responses
+
+1. Missing Token (401 Unauthorized)
+```json
+{
+    "message": "Invalid token"
+}
+```
+
+2. Invalid Token (401 Unauthorized)
+```json
+{
+    "message": "Invalid token"
+}
+```
+
+3. User Not Found (401 Unauthorized)
+```json
+{
+    "message": "User not found"
+}
+```
+
+### Logout User
+`GET /users/logout`
+
+Logs out the authenticated user by invalidating their current session token.
+
+#### Authentication
+- Requires valid JWT token
+- Token can be sent either in:
+  - Cookie header as `token`
+  - Authorization header as `Bearer <token>`
+
+#### Response
+
+##### Success (200 OK)
+```json
+{
+    "message": "Logged out successfully"
+}
+```
+
+##### Error Responses
+
+1. Missing Token (401 Unauthorized)
+```json
+{
+    "message": "Missing token"
+}
+```
+
+2. Invalid Token (401 Unauthorized)
+```json
+{
+    "message": "Invalid token"
+}
+```
+
+#### Notes
+- The endpoint clears the authentication cookie
+- The current token is blacklisted to prevent reuse
+- All subsequent requests with the same token will be rejected
+- A new login is required to get a new valid token 
