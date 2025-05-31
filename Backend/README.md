@@ -134,3 +134,95 @@ Creates a new user account in the system.
 - The response includes a JWT token that expires in 1 hour
 - The password is not included in the response
 - The user's socketId field is optional and not required for registration 
+
+### Login User
+`POST /users/login`
+
+Authenticates a user and returns their information along with an authentication token.
+
+#### Request Body
+```json
+{
+    "email": "string",
+    "password": "string"
+}
+```
+
+#### Example Request
+```json
+{
+    "email": "john.doe@example.com",
+    "password": "securepass123"
+}
+```
+
+#### Field Requirements
+- `email`: Valid email address
+- `password`: Minimum 8 characters long
+
+#### Validation Rules
+- Both email and password are required
+- Email must be a valid email format
+- Password must be at least 8 characters long
+
+#### Response
+
+##### Success (200 OK)
+```json
+{
+    "token": "string",
+    "user": {
+        "email": "string",
+        "name": "string",
+        "age": "number",
+        "gender": "string",
+        "_id": "string",
+        "createdAt": "date",
+        "updatedAt": "date"
+    }
+}
+```
+
+##### Example Success Response
+```json
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWY0YzM5YzM5YzM5YzM5YzM5YzM5YzMiLCJpYXQiOjE3MDk5MjM0NTYsImV4cCI6MTcwOTkyNzA1Nn0.example",
+    "user": {
+        "email": "john.doe@example.com",
+        "name": "John Doe",
+        "age": 25,
+        "gender": "male",
+        "_id": "65f4c39c39c39c39c39c39c3",
+        "createdAt": "2024-03-08T12:34:56.789Z",
+        "updatedAt": "2024-03-08T12:34:56.789Z"
+    }
+}
+```
+
+##### Error Responses
+
+1. Invalid Credentials (401 Unauthorized)
+```json
+{
+    "message": "Invalid email or password"
+}
+```
+
+2. Validation Error (400 Bad Request)
+```json
+{
+    "errors": [
+        {
+            "msg": "Invalid email",
+            "param": "email",
+            "location": "body"
+        }
+    ]
+}
+```
+
+#### Notes
+- The response includes a JWT token that expires in 1 hour
+- The password is not included in the response
+- Invalid credentials return a generic message for security reasons
+- The same validation rules for email and password apply as in registration 
