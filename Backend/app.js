@@ -1,18 +1,22 @@
-const dotenv = require('dotenv');
-dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const connectToDb = require('./db/db');
-const userRoutes = require('./routes/user.routes');
 const cookieParser = require('cookie-parser');
+const { testConnection } = require('./config/database');
+const { syncDatabase } = require('./models');
+const userRoutes = require('./routes/user.routes');
+const hospitalRoutes = require('./routes/hospital.routes');
 
-connectToDb();
+// Test database connection
+testConnection();
+
+// Sync database models
+syncDatabase();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // const bodyParser = require("body-parser");
@@ -27,5 +31,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/users', userRoutes);
+app.use('/hospitals', hospitalRoutes);
 
 module.exports = app;

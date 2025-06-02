@@ -1,18 +1,22 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
 
-
-const blacklistTokenSchema = new mongoose.Schema({
+const BlacklistToken = sequelize.define('BlacklistToken', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     token: {
-        type: String,
-        required: true,
-        unique: true,
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
     },
     createdAt: {
-        type: Date,
-        default: Date.now,
-        expires: 86400, // 24 hours in seconds
-    },
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        expires: 86400 // 24 hours in seconds
+    }
 });
 
-
-module.exports = mongoose.model('BlacklistToken', blacklistTokenSchema);
+module.exports = BlacklistToken;

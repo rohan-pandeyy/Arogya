@@ -1,332 +1,92 @@
-# User API Documentation
+# Arogya Backend
 
-## Endpoints
+This is the backend server for the Arogya application, built using Node.js and Express.js. The backend provides a robust API layer for the Arogya healthcare platform, handling user authentication, data management, and business logic.
 
-### Register User
-`POST /users/register`
+## Tech Stack
 
-Creates a new user account in the system.
+- **Runtime Environment**: Node.js
+- **Web Framework**: Express.js
+- **Database**: PostgreSQL with Sequelize ORM
+- **Authentication**: JWT (JSON Web Tokens)
+- **Password Hashing**: bcrypt
+- **Input Validation**: express-validator
+- **Environment Variables**: dotenv
+- **CORS Support**: cors
+- **Cookie Handling**: cookie-parser
 
-#### Request Body
-```json
-{
-    "email": "string",
-    "password": "string",
-    "name": "string",
-    "age": "number",
-    "gender": "string"
-}
+## Project Structure
+
+```
+Backend/
+├── config/         # Configuration files and database setup
+├── controllers/    # Request handlers and business logic
+├── docs/          # API documentation and specifications
+├── middlewares/   # Custom middleware functions
+├── models/        # Database models and schemas
+├── routes/        # API route definitions
+├── services/      # Business logic and external service integrations
+├── app.js         # Express application setup
+└── server.js      # Server entry point
 ```
 
-#### Example Request
-```json
-{
-    "email": "john.doe@example.com",
-    "password": "securepass123",
-    "name": "John Doe",
-    "age": 25,
-    "gender": "male"
-}
-```
+## Getting Started
 
-#### Field Requirements
-- `email`: Valid email address (must match pattern /.+\@.+\..+/)
-- `password`: Minimum 8 characters long
-- `name`: Between 3 and 30 characters long
-- `age`: Required number value
-- `gender`: Must be one of: "male", "female", "other"
+1. **Prerequisites**
+   - Node.js (v14 or higher)
+   - PostgreSQL database
+   - npm or yarn package manager
 
-#### Validation Rules
-- Email must be unique in the system
-- Password must be at least 8 characters long
-- Name must be at least 3 characters long
-- All fields are required
+2. **Installation**
+   ```bash
+   # Install dependencies
+   npm install
+   ```
 
-#### Response
+3. **Environment Setup**
+   - Create a `.env` file in the root directory
+   - Configure the following environment variables:
+     - Database connection details
+     - JWT secret key
+     - Server port
+     - Other configuration variables
 
-##### Success (201 Created)
-```json
-{
-    "token": "string",
-    "user": {
-        "email": "string",
-        "name": "string",
-        "age": "number",
-        "gender": "string",
-        "_id": "string",
-        "createdAt": "date",
-        "updatedAt": "date"
-    }
-}
-```
+4. **Running the Server**
+   ```bash
+   # Development mode with hot reload
+   npm run dev
 
-##### Example Success Response
-```json
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWY0YzM5YzM5YzM5YzM5YzM5YzM5YzMiLCJpYXQiOjE3MDk5MjM0NTYsImV4cCI6MTcwOTkyNzA1Nn0.example",
-    "user": {
-        "email": "john.doe@example.com",
-        "name": "John Doe",
-        "age": 25,
-        "gender": "male",
-        "_id": "65f4c39c39c39c39c39c39c3",
-        "createdAt": "2024-03-08T12:34:56.789Z",
-        "updatedAt": "2024-03-08T12:34:56.789Z"
-    }
-}
-```
+   # Production mode
+   npm start
+   ```
 
-##### Error (400 Bad Request)
-```json
-{
-    "errors": [
-        {
-            "msg": "string",
-            "param": "string",
-            "location": "string"
-        }
-    ]
-}
-```
+## Development
 
-##### Example Error Responses
+- The server runs on port 3000 by default (configurable via environment variables)
+- API documentation is available in the `/docs` directory
+- The application follows MVC (Model-View-Controller) architecture
+- Sequelize is used as the ORM for database operations
+- JWT-based authentication is implemented for secure API access
 
-1. Invalid Email Format:
-```json
-{
-    "errors": [
-        {
-            "msg": "Invalid email",
-            "param": "email",
-            "location": "body"
-        }
-    ]
-}
-```
+## Security Features
 
-2. Password Too Short:
-```json
-{
-    "errors": [
-        {
-            "msg": "Password must be at least 8 characters long",
-            "param": "password",
-            "location": "body"
-        }
-    ]
-}
-```
+- Password hashing using bcrypt
+- JWT-based authentication
+- CORS protection
+- Input validation using express-validator
+- Secure cookie handling
 
-3. Missing Required Field:
-```json
-{
-    "errors": [
-        {
-            "msg": "All fields are required",
-            "param": "age",
-            "location": "body"
-        }
-    ]
-}
-```
+## Error Handling
 
-#### Notes
-- The response includes a JWT token that expires in 1 hour
-- The password is not included in the response
-- The user's socketId field is optional and not required for registration 
+The application implements centralized error handling with appropriate HTTP status codes and error messages for different scenarios.
 
-### Login User
-`POST /users/login`
+## Contributing
 
-Authenticates a user and returns their information along with an authentication token.
+1. Follow the existing code structure and patterns
+2. Ensure proper error handling and input validation
+3. Add appropriate comments and documentation
+4. Test your changes thoroughly
+5. Update the API documentation if necessary
 
-#### Request Body
-```json
-{
-    "email": "string",
-    "password": "string"
-}
-```
+## License
 
-#### Example Request
-```json
-{
-    "email": "john.doe@example.com",
-    "password": "securepass123"
-}
-```
-
-#### Field Requirements
-- `email`: Valid email address
-- `password`: Minimum 8 characters long
-
-#### Validation Rules
-- Both email and password are required
-- Email must be a valid email format
-- Password must be at least 8 characters long
-
-#### Response
-
-##### Success (200 OK)
-```json
-{
-    "token": "string",
-    "user": {
-        "email": "string",
-        "name": "string",
-        "age": "number",
-        "gender": "string",
-        "_id": "string",
-        "createdAt": "date",
-        "updatedAt": "date"
-    }
-}
-```
-
-##### Example Success Response
-```json
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWY0YzM5YzM5YzM5YzM5YzM5YzM5YzMiLCJpYXQiOjE3MDk5MjM0NTYsImV4cCI6MTcwOTkyNzA1Nn0.example",
-    "user": {
-        "email": "john.doe@example.com",
-        "name": "John Doe",
-        "age": 25,
-        "gender": "male",
-        "_id": "65f4c39c39c39c39c39c39c3",
-        "createdAt": "2024-03-08T12:34:56.789Z",
-        "updatedAt": "2024-03-08T12:34:56.789Z"
-    }
-}
-```
-
-##### Error Responses
-
-1. Invalid Credentials (401 Unauthorized)
-```json
-{
-    "message": "Invalid email or password"
-}
-```
-
-2. Validation Error (400 Bad Request)
-```json
-{
-    "errors": [
-        {
-            "msg": "Invalid email",
-            "param": "email",
-            "location": "body"
-        }
-    ]
-}
-```
-
-#### Notes
-- The response includes a JWT token that expires in 1 hour
-- The password is not included in the response
-- Invalid credentials return a generic message for security reasons
-- The same validation rules for email and password apply as in registration 
-
-### Get User Profile
-`GET /users/profile`
-
-Retrieves the authenticated user's profile information.
-
-#### Authentication
-- Requires valid JWT token
-- Token can be sent either in:
-  - Cookie header as `token`
-  - Authorization header as `Bearer <token>`
-
-#### Response
-
-##### Success (200 OK)
-```json
-{
-    "email": "string",
-    "name": "string",
-    "age": "number",
-    "gender": "string",
-    "_id": "string",
-    "createdAt": "date",
-    "updatedAt": "date"
-}
-```
-
-##### Example Success Response
-```json
-{
-    "email": "john.doe@example.com",
-    "name": "John Doe",
-    "age": 25,
-    "gender": "male",
-    "_id": "65f4c39c39c39c39c39c39c3",
-    "createdAt": "2024-03-08T12:34:56.789Z",
-    "updatedAt": "2024-03-08T12:34:56.789Z"
-}
-```
-
-##### Error Responses
-
-1. Missing Token (401 Unauthorized)
-```json
-{
-    "message": "Invalid token"
-}
-```
-
-2. Invalid Token (401 Unauthorized)
-```json
-{
-    "message": "Invalid token"
-}
-```
-
-3. User Not Found (401 Unauthorized)
-```json
-{
-    "message": "User not found"
-}
-```
-
-### Logout User
-`GET /users/logout`
-
-Logs out the authenticated user by invalidating their current session token.
-
-#### Authentication
-- Requires valid JWT token
-- Token can be sent either in:
-  - Cookie header as `token`
-  - Authorization header as `Bearer <token>`
-
-#### Response
-
-##### Success (200 OK)
-```json
-{
-    "message": "Logged out successfully"
-}
-```
-
-##### Error Responses
-
-1. Missing Token (401 Unauthorized)
-```json
-{
-    "message": "Missing token"
-}
-```
-
-2. Invalid Token (401 Unauthorized)
-```json
-{
-    "message": "Invalid token"
-}
-```
-
-#### Notes
-- The endpoint clears the authentication cookie
-- The current token is blacklisted to prevent reuse
-- All subsequent requests with the same token will be rejected
-- A new login is required to get a new valid token 
+This project is licensed under the ISC License. 

@@ -3,7 +3,7 @@ const { sequelize } = require('../config/database');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const User = sequelize.define('User', {
+const Doctor = sequelize.define('Doctor', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -28,40 +28,42 @@ const User = sequelize.define('User', {
             len: [3, 30]
         }
     },
-    age: {
-        type: DataTypes.INTEGER,
+    specialization: {
+        type: DataTypes.STRING,
         allowNull: false
     },
-    gender: {
+    licenseNumber: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-            isIn: [['male', 'female', 'other']]
-        }
+        unique: true
+    },
+    yearsOfExperience: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     timestamps: true,
     hooks: {
-        beforeCreate: async (user) => {
-            if (user.password) {
-                user.password = await bcrypt.hash(user.password, 10);
+        beforeCreate: async (doctor) => {
+            if (doctor.password) {
+                doctor.password = await bcrypt.hash(doctor.password, 10);
             }
         },
-        beforeUpdate: async (user) => {
-            if (user.changed('password')) {
-                user.password = await bcrypt.hash(user.password, 10);
+        beforeUpdate: async (doctor) => {
+            if (doctor.changed('password')) {
+                doctor.password = await bcrypt.hash(doctor.password, 10);
             }
         }
     }
 });
 
 // Instance methods
-User.prototype.generateAuthToken = function() {
+Doctor.prototype.generateAuthToken = function() {
     return jwt.sign({ id: this.id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' });
 };
 
-User.prototype.comparePassword = async function(password) {
+Doctor.prototype.comparePassword = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
 
-module.exports = User;
+module.exports = Doctor; 
