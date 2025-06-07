@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "This is the backend server for the Arogya application, built using Node.js and Express.js. The backend provides a robust API layer for the Arogya healthcare platform, handling user authentication, data management, and business logic.",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
@@ -19,11 +19,14 @@
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.11.3",
+    "pg": "^8.16.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"
+  },
+  "directories": {
+    "doc": "docs"
   }
 }
