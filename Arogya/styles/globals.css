@@ -22,3 +22,11 @@
     font-weight: normal;
     font-style: normal;
   }
+
+@font-face {
+  font-family: 'PlusJakartaSans';
+  src: url('/fonts/PlusJakartaSans-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 700; /* adjust range if needed */
+  font-style: normal;
+  font-display: swap;
+}

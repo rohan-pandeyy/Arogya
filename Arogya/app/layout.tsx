@@ -1,6 +1,7 @@
 // app/layout.tsx
-import '../styles/globals.css';
-
+import '@/styles/globals.css';
+import NavBar from '@/components/NavBar'
+import { ModalProvider } from "@/context/ModalContext";
 import { ReactNode } from 'react';
 
 export const metadata = {
@@ -13,7 +14,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <head />
       <body>
-        {children}
+        <ModalProvider>
+          <NavBar />
+          {children}
+        </ModalProvider>
       </body>
     </html>
   );

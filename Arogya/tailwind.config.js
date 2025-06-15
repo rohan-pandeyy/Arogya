@@ -17,6 +17,11 @@ const config = {
         funnel: ['FunnelSans', 'sans-serif'],
         opensans: ['Open Sans', 'sans-serif'],
         specialGothic: ['SpecialGothicExpandedOne', 'sans-serif'],
+        plusjakarta: ['PlusJakartaSans', 'sans-serif'],
+      },
+      screens: {
+        'xs': '850px',
+        'xxs': '480px',
       },
       animation: {
         pulse1: "moveY 25s ease-in-out infinite",

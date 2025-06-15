@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
+import { useModal } from "@/context/ModalContext"
 
 export default function SignUp() {
   const [submitted, setSubmitted] = React.useState<any>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [step, setStep] = React.useState(1); // Step 1 or 2
+  const { closeModal } = useModal();
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -44,9 +46,12 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center pt-10 font-opensans font-semibold  justify-center">
+    <div className="min-h-screen flex flex-col items-center font-opensans font-semibold  justify-center">
       <div className="flex items-start justify-center  relative z-20">
         <div className="w-full max-w-4xl bg-green-500 border-0 rounded-3xl shadow-lg">
+          <button className="absolute top-2 right-4 text-black text-xl font-bold" onClick={closeModal}>
+            ×
+          </button>
           <div className="text-center pt-12 pb-8">
             <h2 className="text-2xl font-specialGothic text-black" >
               Create an account
