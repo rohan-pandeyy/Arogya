@@ -1,13 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ColourfulText } from "@/components/ui/colourful-text";
 import { Input, Button } from "@heroui/react";
 import { MapPinIcon } from '@heroicons/react/24/solid'
 
 export default function HeroSection() {
-
   const [pickupLocation, setPickupLocation] = useState("");
   const [isLocating, setIsLocating] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
 
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
@@ -31,6 +33,7 @@ export default function HeroSection() {
 
           if (data && data.display_name) {
             setPickupLocation(data.display_name);
+            setShowSuggestions(false);
           } else {
             setPickupLocation(`Lat: ${latitude.toFixed(4)}, Lng: ${longitude.toFixed(4)}`);
           }
@@ -49,7 +52,39 @@ export default function HeroSection() {
     );
   };
 
-  
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchSuggestions = async () => {
+      if (pickupLocation.trim().length < 3) {
+        setSuggestions([]);
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(pickupLocation)}`,
+          { signal: controller.signal }
+        );
+
+        const data = await res.json();
+        const results = data.map((item: any) => item.display_name);
+        setSuggestions(results.slice(0, 5));
+      } catch (err) {
+        if (err instanceof Error && err.name !== "AbortError") {
+          console.error("Autocomplete error:", err.message);
+        }
+      }
+    };
+
+    const timeout = setTimeout(fetchSuggestions, 300);
+    return () => {
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [pickupLocation]);
+
 
   return (
     <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-white to-green-100">
@@ -62,13 +97,24 @@ export default function HeroSection() {
             <h1 className="text-2xl md:text-5xl lg:text-7xl font-bold text-black relative z-2 text-left">
               Book an Ambulance<br /><ColourfulText text="with Arogya" />
             </h1>
+
+
             <div className="relative w-full sm:w-96">
               <Input
                 label="Pickup location"
                 type="text"
                 value={pickupLocation}
-                onChange={(e) => setPickupLocation(e.target.value)}
-                className="w-full"
+                onChange={(e) => {
+                  setPickupLocation(e.target.value);
+                  setShowSuggestions(true);
+                }}
+                onFocus={() => {
+                  if (suggestions.length > 0) setShowSuggestions(true);
+                }}
+                onBlur={() => {
+                  setTimeout(() => setShowSuggestions(false), 150);
+                }}
+                className="w-full z-0"
                 endContent={
                   <div className="flex items-center gap-2 transition-all duration-200 ease-in-out">
                     {pickupLocation === "" ? (
@@ -104,10 +150,29 @@ export default function HeroSection() {
                 }
               />
 
+              {showSuggestions && suggestions.length > 0 && (
+                <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-52 overflow-y-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      onClick={() => {
+                        setPickupLocation(suggestion);
+                        setSuggestions([]);
+                        setShowSuggestions(false);
+                      }}
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                    >
+                      {suggestion}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+{/* will have to make custom database for "Dropoff hospital" and retrive suggestions from there */}
             <div className="flex w-full sm:w-96 flex-wrap md:flex-nowrap">
-              <Input isClearable label="Dropoff hospital" type="address" />
+              <Input isClearable label="Dropoff hospital" type="address" className="z-0" />
             </div>
+
             <Button className="bg-gradient-to-tr from-slate-500 to-black text-white shadow-lg w-[70%] sm:w-36" radius="md">
               Call Ambulance ➜
             </Button>
