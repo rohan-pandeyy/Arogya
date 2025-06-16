@@ -22,7 +22,7 @@ export default function NavBar() {
   ];
 
   return (
-    <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen}>
+    <Navbar className="fixed top-0 left-0" shouldHideOnScroll onMenuOpenChange={setIsMenuOpen}>
       <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="xs:hidden"

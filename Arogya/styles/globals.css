@@ -30,3 +30,9 @@
   font-style: normal;
   font-display: swap;
 }
+
+@layer utilities {
+  .spinner {
+    @apply animate-spin border-2 border-t-transparent rounded-full w-4 h-4;
+  }
+}
