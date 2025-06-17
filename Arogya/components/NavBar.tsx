@@ -63,13 +63,19 @@ export default function NavBar() {
       <NavbarContent className="font-plusjakarta" justify="end">
         <NavbarItem className="hidden xxs:block">
           <Link href="/" className={pathname === "/" ? "text-primary font-semibold" : ""} color="danger">
-          Call an Ambulance
+            Call an Ambulance
           </Link>
         </NavbarItem>
 
         <NavbarItem>
           <Button onPress={() => openModal("signup")} variant="flat" color="success">
-          Sign Up
+            Sign Up
+          </Button>
+        </NavbarItem>
+
+        <NavbarItem>
+          <Button onPress={() => openModal("signin")} variant="flat" color="success">
+            Sign In
           </Button>
         </NavbarItem>
       </NavbarContent>

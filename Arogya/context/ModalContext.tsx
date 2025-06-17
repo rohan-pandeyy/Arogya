@@ -1,10 +1,12 @@
 "use client";
 import React, { createContext, useContext, useState } from "react";
 import SignUp from "@/components/SignUp";
+import SignIn from "@/components/SignIn";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 
-type ModalType = "signup" | null;
+type ModalType = "signup" | "signin" | null;
 
 interface ModalContextType {
   openModal: (type: ModalType) => void;
@@ -32,7 +34,7 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       <AnimatePresence>
         {modal === "signup" && (
           <motion.div
-            className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-50 flex items-center justify-center"
+            className="fixed inset-0 z-50 backdrop-blur-md bg-opacity-50 flex items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -45,6 +47,24 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
               transition={{ duration: 0.4, ease: "easeOut" }}
             >
               <SignUp />
+            </motion.div>
+          </motion.div>
+        )}
+        {modal === "signin" && (
+          <motion.div
+            className="fixed inset-0 z-50 backdrop-blur-md bg-opacity-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="relative max-h-[95vh] overflow-y-auto p-4"
+              initial={{ y: "20%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "20%", opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <SignIn />
             </motion.div>
           </motion.div>
         )}

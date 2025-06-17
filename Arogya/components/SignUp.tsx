@@ -6,14 +6,43 @@ export default function SignUp() {
   const [submitted, setSubmitted] = React.useState<any>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [step, setStep] = React.useState(1); // Step 1 or 2
-  const { closeModal } = useModal();
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const { openModal, closeModal } = useModal();
+
+  const handleSwitchToSignIn = () => {
+    closeModal(); 
+    setTimeout(() => {
+      openModal("signin");
+    }, 300);
+  };
+
   const handleBack = () => {
     setStep(1);
     setError(null);
+  };
+
+  const validateStepOne = () => {
+    if (!email || !password) {
+      setError("Please enter both email and password");
+      return false;
+    }
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email");
+      return false;
+    }
+  
+    if (password.length < 6) {
+      setError("Password should be at least 6 characters long");
+      return false;
+    }
+  
+    setError(null);
+    return true;
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,7 +127,9 @@ export default function SignUp() {
                 <button
                   type="button"
                   className="mt-3 w-full py-2 text-md text-white bg-green-600 rounded-md hover:bg-green-700"
-                  onClick={() => setStep(2)}
+                  onClick={() => {
+                    if (validateStepOne()) setStep(2);
+                  }}
                 >
                   Next
                 </button>
@@ -207,6 +238,7 @@ export default function SignUp() {
                   Already have an account?{" "}
                   <button
                     type="button"
+                    onClick={handleSwitchToSignIn}
                     className="text-green-600 hover:underline"
                   >
                     Sign In
