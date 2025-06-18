@@ -2,6 +2,7 @@
 import '@/styles/globals.css';
 import NavBar from '@/components/NavBar';
 import { ModalProvider } from "@/context/ModalContext";
+import { getUserFromCookies } from '@/lib/getUser';
 import { UserProvider } from "@/context/UserContext";
 import { ReactNode } from 'react';
 
@@ -10,12 +11,13 @@ export const metadata = {
   description: 'Health management system',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const user = await getUserFromCookies();
   return (
     <html lang="en">
       <head />
       <body>
-        <UserProvider> 
+        <UserProvider initialUser={user}> 
           <ModalProvider>
             <NavBar />
             {children}

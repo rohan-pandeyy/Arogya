@@ -21,30 +21,34 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const UserProvider = ({
+  children,
+  initialUser = null,
+}: {
+  children: ReactNode;
+  initialUser?: User | null;
+}) => {
+  const [user, setUser] = useState<User | null>(initialUser);
 
-  // Fetch user profile on mount
   useEffect(() => {
+    if (user) return;
+
     const fetchUser = async () => {
       try {
         const res = await fetch("http://localhost/api/user/profile", {
-          credentials: "include", // ensures cookies are sent
+          credentials: "include",
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch");
-        }
-
+        if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         setUser(data);
       } catch (err) {
-        setUser(null); 
+        setUser(null);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [user]);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
