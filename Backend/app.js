@@ -35,5 +35,6 @@ app.get('/', (req, res) => {
 
 app.use('/users', userRoutes);
 app.use('/hospitals', hospitalRoutes);
+app.use('/api/user', userRoutes);
 
 module.exports = app;

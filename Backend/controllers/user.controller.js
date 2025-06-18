@@ -3,6 +3,17 @@ const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const BlacklistToken = require('../models/blacklistToken.model');
 
+module.exports.getCurrentUser = async (req, res) => {
+    try {
+        const userData = req.user.toJSON();
+        delete userData.password;
+        res.status(200).json({ user: userData });
+    } catch (error) {
+        console.error('Get current user error:', error);
+        res.status(500).json({ message: 'Error fetching user info' });
+    }
+};
+
 module.exports.registerUser = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

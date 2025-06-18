@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import { useUser } from "@/context/UserContext";
+import { Avatar } from "@heroui/react";
 import { usePathname } from "next/navigation";
 import { useModal } from "@/context/ModalContext"
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@heroui/react";
@@ -12,6 +14,7 @@ export default function NavBar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { openModal } = useModal();
+  const { user } = useUser();
 
   const menuItems = [
     { label: "Appointments", href: "/book-an-appointment" },
@@ -67,17 +70,31 @@ export default function NavBar() {
           </Link>
         </NavbarItem>
 
-        <NavbarItem>
-          <Button onPress={() => openModal("signup")} variant="flat" color="success">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {user ? (
+          <NavbarItem>
+            <div className="p-[2px] rounded-full border-2 border-black">
+              <Avatar
+                isBordered={false}
+                name={user.name?.split(" ")[0][0].toUpperCase() || ""}
+                className="bg-success text-white text-xl"
+              />
+            </div>
+          </NavbarItem>
+        ) : (
+          <>
+            {/*<NavbarItem>
+              <Button onPress={() => openModal("signup")} variant="flat" color="success">
+                Sign Up
+              </Button>
+            </NavbarItem>*/}
 
-        <NavbarItem>
-          <Button onPress={() => openModal("signin")} variant="flat" color="success">
-            Sign In
-          </Button>
-        </NavbarItem>
+            <NavbarItem>
+              <Button onPress={() => openModal("signin")} variant="flat" className="bg-black text-white hover:bg-green-500 hover:text-black hover:font-extrabold">
+                Sign In
+              </Button>
+            </NavbarItem>
+          </>
+        )}
       </NavbarContent>
 
       <NavbarMenu className="sm:w-vw h-max items-center">

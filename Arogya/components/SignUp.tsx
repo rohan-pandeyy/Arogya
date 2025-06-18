@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import { useModal } from "@/context/ModalContext"
+import { useUser } from "@/context/UserContext";
 
 export default function SignUp() {
   const [submitted, setSubmitted] = React.useState<any>(null);
   const [error, setError] = React.useState<string | null>(null);
-  const [step, setStep] = React.useState(1); // Step 1 or 2
+  const [step, setStep] = React.useState(1);
+  const { setUser } = useUser();
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -66,8 +68,15 @@ export default function SignUp() {
         return;
       }
 
+      setUser({
+        id: json.user.id,
+        name: json.user.name,
+        email: json.user.email,
+      })
+
       setSubmitted(json.user);
       setError(null);
+      closeModal();
     } catch (err) {
       console.error(err);
       setError("Server is not reachable");
