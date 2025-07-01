@@ -121,10 +121,10 @@ Install PostgreSQL from: https://www.postgresql.org/download/
    npm install
    ```
 3. Create `.env` file</br>
-   At the root of the arogya/ project directory (same level as Arogya/ and Backend/), create a .env file with the following content:
+   Inside the ./Backend directory of the project, create a .env file with the following content:
    ```env
    PORT=80
-   DATABSE_URL=postgres://<username>:<password>@localhost:5432/<db_name>
+   DATABASE_URL=postgres://<username>:<password>@localhost:5432/<db_name>
    JWT_SECRET_KEY=arogya-secret
    ```
    Replace `<username>`, `<password>`, and `<db_name>` with your actual PostgreSQL credentials and desired database name.
