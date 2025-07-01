@@ -183,7 +183,7 @@ In separate terminals:
 Rohan Pandey - `rohan1706pandey@gmail.com`</br>
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rohan-pandey-a9a50b270/) [![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/rohan-pandeyy)  [![Twitter](https://img.shields.io/badge/Twitter-%231DA1F2.svg?logo=X&logoColor=white)](https://twitter.com/rohan_pandeyy) 
 
-Dhruv Kumar - `dhruv.jumar2782@gmail.com`</br>
+Dhruv Kumar - `dhruv.kumar2782@gmail.com`</br>
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dhruvk27/) [![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/dhruvk278) 
 
 Avanish Kumar - `avinish05@gmail.com`</br>
