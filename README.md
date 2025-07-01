@@ -1,10 +1,4 @@
 <a id="readme-top"></a>
-
-[![Contributors][https://img.shields.io/github/contributors/rohan-pandeyy/arogya.svg?style=for-the-badge]][https://github.com/rohan-pandeyy/arogya/graphs/contributors]
-[![Forks][https://img.shields.io/github/forks/rohan-pandeyy/arogya.svg?style=for-the-badge]][https://github.com/rohan-pandeyy/arogya/network/members]
-[![Stargazers][https://img.shields.io/github/stars/rohan-pandeyy/arogya.svg?style=for-the-badge]][https://github.com/rohan-pandeyy/arogya/stargazers]
-[![Issues][https://img.shields.io/github/issues/rohan-pandeyy/arogya.svg?style=for-the-badge]][https://github.com/rohan-pandeyy/arogya/issues]
-
 <!-- WHITE LOGO REQUIRED -->
 <!-- Heading -->
 <br />
