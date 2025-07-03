@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useModal } from "@/context/ModalContext"
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@heroui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import UserDropdown from "@/components/ui/userdropdown";
 
 export const ArogyaLogo = () => {
   return <img src="/assets/logo.png" width={37} height={37} alt="Arogya Logo" />;
@@ -124,13 +125,7 @@ export default function NavBar() {
 
         {user ? (
           <NavbarItem>
-            <div className="p-[2px] rounded-full border-2 border-black">
-              <Avatar
-                isBordered={false}
-                name={user.name?.split(" ")[0][0].toUpperCase() || ""}
-                className="bg-success text-white text-xl"
-              />
-            </div>
+            <UserDropdown />
           </NavbarItem>
         ) : (
           <>
