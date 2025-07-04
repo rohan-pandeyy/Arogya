@@ -19,7 +19,7 @@ const hospitalValidation = [
 // Routes
 router.get('/', hospitalController.getAllHospitals);
 router.get('/:id', hospitalController.getHospitalById);
-router.post('/', authMiddleware.authUser, hospitalValidation, hospitalController.createHospital);
+router.post('/', hospitalValidation, hospitalController.createHospital);
 router.put('/:id', authMiddleware.authUser, hospitalValidation, hospitalController.updateHospital);
 router.delete('/:id', authMiddleware.authUser, hospitalController.deleteHospital);
 
