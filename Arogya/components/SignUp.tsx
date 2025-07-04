@@ -2,6 +2,7 @@
 import React from "react";
 import { useModal } from "@/context/ModalContext"
 import { useUser } from "@/context/UserContext";
+import { getBaseUrl } from '@/lib/getBaseUrl';
 
 export default function SignUp() {
   const [submitted, setSubmitted] = React.useState<any>(null);
@@ -53,7 +54,7 @@ export default function SignUp() {
     const data = Object.fromEntries(formData);
 
     try {
-      const res = await fetch("http://localhost:80/users/register", {
+    const res = await fetch(`${getBaseUrl()}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

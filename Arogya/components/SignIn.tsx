@@ -2,6 +2,7 @@
 import React from "react";
 import { useModal } from "@/context/ModalContext";
 import { useUser } from "@/context/UserContext";
+import { getBaseUrl } from '@/lib/getBaseUrl';
 
 export default function SignIn() {
   const [error, setError] = React.useState<string | null>(null);
@@ -21,7 +22,7 @@ export default function SignIn() {
   e.preventDefault();
 
   try {
-    const res = await fetch("http://localhost:80/users/login", {
+    const res = await fetch(`${getBaseUrl()}/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +38,7 @@ export default function SignIn() {
       return;
     }
 
-    const profileRes = await fetch("http://localhost:80/users/profile", {
+    const profileRes = await fetch(`${getBaseUrl()}/users/profile`, {
       method: "GET",
       credentials: "include",
     });

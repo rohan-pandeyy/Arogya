@@ -9,7 +9,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import UserDropdown from "@/components/ui/userdropdown";
 
 export const ArogyaLogo = () => {
-  return <img src="/assets/logo.png" width={37} height={37} alt="Arogya Logo" />;
+  return <img src="/arogya_black.svg" width={37} height={37} alt="Arogya Logo" />;
 };
 
 export default function NavBar() {

@@ -10,6 +10,7 @@ import {
 } from "@heroui/react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import { getBaseUrl } from '@/lib/getBaseUrl';
 
 
 export const PlusIcon = (props: any) => (
@@ -43,7 +44,7 @@ export default function UserDropdown() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:80/users/logout", {
+      const res = await fetch(`${getBaseUrl()}/users/logout`, {
         method: "POST",
         credentials: "include",
       });

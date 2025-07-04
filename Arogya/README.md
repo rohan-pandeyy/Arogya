@@ -4,14 +4,25 @@ This document explains how the frontend of the Arogya application interacts with
 
 ---
 
+## 🌍 Base URL Handling
+The application dynamically determines the API base URL depending on the runtime context:
+
+- **Server-side (SSR, inside Docker):**
+Uses `process.env.INTERNAL_API_URL` if set, otherwise defaults to `http://localhost:80`.
+
+- **Client-side (browser):**
+Uses `process.env.NEXT_PUBLIC_API_URL` if set, otherwise defaults to `http://localhost:5000`.
+
+
+
 ## 📡 API Endpoint Summary
 
-| Action           | HTTP Method | Endpoint                  | Description                          |
+| Action           | HTTP Method | Path                      | Description                          |
 |------------------|-------------|---------------------------|--------------------------------------|
-| Register User    | POST        | `http://localhost:80/users/register` | Registers a new user and returns token + user details |
-| Login User       | POST        | `http://localhost:80/users/login`    | Authenticates user, sets auth cookie, returns user data |
-| Get User Profile | GET         | `http://localhost:80/users/profile`  | Fetches user details (protected route) |
-| Logout User      | GET         | `http://localhost:80/users/logout`   | Logs out the user and clears the token cookie |
+| Register User    | POST        | `/users/register`         | Registers a new user and returns token + user details |
+| Login User       | POST        | `/users/login`            | Authenticates user, sets auth cookie, returns user data |
+| Get User Profile | GET         | `/users/profile`          | Fetches user details (protected route using token cookie) |
+| Logout User      | GET         | `/users/logout`           | Logs out the user and clears the token cookie |
 
 ---
 
@@ -28,7 +39,9 @@ The frontend form (in `SignUp.tsx`) gathers input data like:
 It sends this data as a **JSON object** using a `POST` request via the Fetch API:
 
 ```ts
-const res = await fetch("http://localhost:80/users/register", {
+import { getBaseUrl } from "@/lib/getBaseUrl";
+
+const res = await fetch(`${getBaseUrl()}/users/register`, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -56,60 +69,3 @@ const res = await fetch("http://localhost:80/users/register", {
   - `/users` → for all user-related endpoints
 - Database: PostgreSQL (`arogya_db`)
 - ORM: Sequelize
-
----
-
-## 🛠️ Dev Setup
-
-### Run Backend
-
-```bash
-# Run as admin/root if using port 80
-npm run dev
-```
-
-Make sure `.env` has:
-```
-PORT=80
-DATABASE_URL=postgres://postgres:YOUR_PASSWORD@localhost:5432/arogya_db
-```
-
-### Run Frontend
-
-```bash
-npm run dev
-```
-
-### Test Registration
-
-1. Go to `http://localhost:3000`
-2. Fill out the registration form
-3. On success, response will be logged and shown below the form
-
----
-
-## 📌 Notes
-
-- The backend does **not support GET requests to `/users/register`**. It must be called with `POST`.
-- You must **run your backend with admin privileges** if you're using port 80.
-
----
-
-## ✅ Example Successful Response
-
-```json
-{
-  "token": "JWT_TOKEN_STRING",
-  "user": {
-    "id": 4,
-    "email": "test@example.com",
-    "name": "Test User",
-    "age": 25,
-    "gender": "male",
-    "createdAt": "...",
-    "updatedAt": "..."
-  }
-}
-```
-
----

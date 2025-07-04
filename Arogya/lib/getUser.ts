@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 export async function getUserFromCookies() {
   const cookieStore = await cookies();
@@ -7,7 +8,7 @@ export async function getUserFromCookies() {
   if (!token?.value) return null;
 
   try {
-    const res = await fetch("http://localhost:80/users/profile", {
+    const res = await fetch(`${getBaseUrl()}/users/profile`, {
       headers: {
         Cookie: `token=${token.value}`,
       },
