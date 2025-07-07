@@ -10,8 +10,7 @@ import {
 } from "@heroui/react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { getBaseUrl } from '@/lib/getBaseUrl';
-
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 export const PlusIcon = (props: any) => (
   <svg
@@ -48,7 +47,7 @@ export default function UserDropdown() {
         method: "POST",
         credentials: "include",
       });
-  
+
       if (res.ok) {
         setUser(null); // clear user context
         router.push("/"); // redirect to homepage or login
@@ -68,7 +67,8 @@ export default function UserDropdown() {
       showArrow
       classNames={{
         base: "before:bg-default-200",
-        content: "p-0 border-small border-divider bg-[#e4ffe8] text-white font-inter",
+        content:
+          "p-0 border-small border-divider bg-[#e4ffe8] text-white font-inter",
       }}
       radius="sm"
     >
@@ -106,7 +106,11 @@ export default function UserDropdown() {
         }}
       >
         <DropdownSection showDivider aria-label="Profile & Actions">
-          <DropdownItem key="profile" isReadOnly className="h-14 gap-2 opacity-100">
+          <DropdownItem
+            key="profile"
+            isReadOnly
+            className="h-14 gap-2 opacity-100"
+          >
             <User
               avatarProps={{
                 size: "sm",
@@ -120,19 +124,35 @@ export default function UserDropdown() {
               description={user.email}
             />
           </DropdownItem>
-          <DropdownItem key="dashboard" onClick={() => router.push("/dashboard")}>
-              Dashboard
-            </DropdownItem>
-          <DropdownItem key="settings" onClick={() => router.push("/user-dashboard")}>Settings</DropdownItem>
-          <DropdownItem key="enquire" endContent={<PlusIcon className="text-large" />}>
+          <DropdownItem
+            key="dashboard"
+            onClick={() => router.push("/dashboard")}
+          >
+            Dashboard
+          </DropdownItem>
+          <DropdownItem
+            key="settings"
+            onClick={() => router.push("/user-dashboard")}
+          >
+            Settings
+          </DropdownItem>
+          <DropdownItem
+            key="enquire"
+            endContent={<PlusIcon className="text-large" />}
+          >
             Enquire
           </DropdownItem>
         </DropdownSection>
 
         <DropdownSection aria-label="Help & Feedback">
           <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-          <DropdownItem key="logout"
-           className="!text-red-500 hover:!text-white hover:!bg-red-500" onClick={handleLogout}>Log Out </DropdownItem>
+          <DropdownItem
+            key="logout"
+            className="!text-red-500 hover:!text-white hover:!bg-red-500"
+            onClick={handleLogout}
+          >
+            Log Out{" "}
+          </DropdownItem>
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>

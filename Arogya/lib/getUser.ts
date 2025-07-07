@@ -4,7 +4,7 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 export async function getUserFromCookies() {
   const cookieStore = await cookies();
 
-  const token = cookieStore.get("token"); 
+  const token = cookieStore.get("token");
   if (!token?.value) return null;
 
   try {

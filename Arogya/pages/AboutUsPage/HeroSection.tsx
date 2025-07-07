@@ -12,7 +12,7 @@ export default function HeroSection() {
           What is <span className="font-specialGothic font-light">Arogya</span>?
         </h2>
         <p className="text-white text-md md:text-2xl max-w-xl mt-6 text-center font-plusjakarta">
-            Quality Healthcare Accessible at Your Doorstep
+          Quality Healthcare Accessible at Your Doorstep
         </p>
       </Vortex>
     </div>

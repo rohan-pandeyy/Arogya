@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { useModal } from "@/context/ModalContext"
+import { useModal } from "@/context/ModalContext";
 import { useUser } from "@/context/UserContext";
-import { getBaseUrl } from '@/lib/getBaseUrl';
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 export default function SignUp() {
   const [submitted, setSubmitted] = React.useState<any>(null);
@@ -16,7 +16,7 @@ export default function SignUp() {
   const { openModal, closeModal } = useModal();
 
   const handleSwitchToSignIn = () => {
-    closeModal(); 
+    closeModal();
     setTimeout(() => {
       openModal("signin");
     }, 300);
@@ -32,18 +32,18 @@ export default function SignUp() {
       setError("Please enter both email and password");
       return false;
     }
-  
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email");
       return false;
     }
-  
+
     if (password.length < 8) {
       setError("Password should be at least 8 characters long");
       return false;
     }
-  
+
     setError(null);
     return true;
   };
@@ -54,7 +54,7 @@ export default function SignUp() {
     const data = Object.fromEntries(formData);
 
     try {
-    const res = await fetch(`${getBaseUrl()}/users/register`, {
+      const res = await fetch(`${getBaseUrl()}/users/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function SignUp() {
         id: json.user.id,
         name: json.user.name,
         email: json.user.email,
-      })
+      });
 
       setSubmitted(json.user);
       setError(null);
@@ -88,11 +88,14 @@ export default function SignUp() {
     <div className="min-h-screen flex flex-col items-center font-opensans font-semibold  justify-center">
       <div className="flex items-start justify-center  relative z-20">
         <div className="w-full max-w-4xl bg-green-500 border-0 rounded-3xl shadow-lg">
-          <button className="absolute top-2 right-4 text-black text-xl font-bold" onClick={closeModal}>
+          <button
+            className="absolute top-2 right-4 text-black text-xl font-bold"
+            onClick={closeModal}
+          >
             ×
           </button>
           <div className="text-center pt-12 pb-8">
-            <h2 className="text-2xl font-specialGothic text-black" >
+            <h2 className="text-2xl font-specialGothic text-black">
               Create an account
             </h2>
           </div>
@@ -143,10 +146,12 @@ export default function SignUp() {
                 >
                   Next
                 </button>
-                
+
                 <div className="flex items-center my-4 w-full max-w-sm px-6">
                   <div className="flex-grow border-t border-black"></div>
-                  <span className="mx-4 text-black italic font-medium text-sm">or</span>
+                  <span className="mx-4 text-black italic font-medium text-sm">
+                    or
+                  </span>
                   <div className="flex-grow border-t border-black"></div>
                 </div>
 
@@ -191,8 +196,16 @@ export default function SignUp() {
                       viewBox="-1.5 0 20 20"
                       version="1.1"
                     >
-                      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                        <g transform="translate(-102.000000, -7439.000000)" fill="currentColor">
+                      <g
+                        stroke="none"
+                        strokeWidth="1"
+                        fill="none"
+                        fillRule="evenodd"
+                      >
+                        <g
+                          transform="translate(-102.000000, -7439.000000)"
+                          fill="currentColor"
+                        >
                           <g transform="translate(56.000000, 160.000000)">
                             <path
                               d="M57.5708873,7282.19296 C58.2999598,7281.34797 58.7914012,7280.17098 58.6569121,7279 
@@ -254,15 +267,14 @@ export default function SignUp() {
                     Sign In
                   </button>
                 </div>
-
               </>
             )}
 
             {step === 2 && (
-              <> 
+              <>
                 <div className="mb-5 w-80">
-                <input type="hidden" name="email" value={email} />
-                <input type="hidden" name="password" value={password} />
+                  <input type="hidden" name="email" value={email} />
+                  <input type="hidden" name="password" value={password} />
                   <input
                     required
                     id="name"
@@ -290,9 +302,11 @@ export default function SignUp() {
                     name="gender"
                     required
                     defaultValue=""
-                    className=" italic font-normal w-full px-4 py-2 text-md border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-gray-400 " 
+                    className=" italic font-normal w-full px-4 py-2 text-md border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-gray-400 "
                   >
-                    <option value="" disabled>Gender</option>
+                    <option value="" disabled>
+                      Gender
+                    </option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                     <option value="other">Other</option>

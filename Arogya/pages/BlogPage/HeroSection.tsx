@@ -3,9 +3,9 @@ import { HoverEffect } from "@/components/ui/card-hover-effect";
 export default function HeroSection() {
   return (
     <div className="h-screen bg-gradient-to-b from-white to-green-100">
-        <div className="max-w-5xl mt-16 mx-auto">
-            <HoverEffect items={projects} />
-        </div>
+      <div className="max-w-5xl mt-16 mx-auto">
+        <HoverEffect items={projects} />
+      </div>
     </div>
   );
 }

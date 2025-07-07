@@ -1,17 +1,17 @@
-version: '3.8'
+version: "3.8"
 
 services:
   frontend:
     build: ./Arogya
     ports:
-      - "3000:3000"             # expose frontend dev server to localhost
+      - "3000:3000" # expose frontend dev server to localhost
     volumes:
-      - ./Arogya:/app           # mount frontend code for live reload
-      - /app/node_modules       # prevent host node_modules from overwriting container’s
+      - ./Arogya:/app # mount frontend code for live reload
+      - /app/node_modules # prevent host node_modules from overwriting container’s
     working_dir: /app
-    command: npm run dev        # run Next.js dev mode
+    command: npm run dev # run Next.js dev mode
     env_file:
-      - ./Arogya/.env.docker     # load local dev API URL like http://localhost:80
+      - ./Arogya/.env.docker # load local dev API URL like http://localhost:80
     depends_on:
       - backend
     networks:
@@ -32,7 +32,6 @@ services:
       - db
     networks:
       - arogya-net
-
 
   db:
     image: postgres:15

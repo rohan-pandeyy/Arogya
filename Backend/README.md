@@ -37,6 +37,7 @@ Backend/
    - npm or yarn package manager
 
 2. **Installation**
+
    ```bash
    # Install dependencies
    npm install
@@ -51,6 +52,7 @@ Backend/
      - Other configuration variables
 
 4. **Running the Server**
+
    ```bash
    # Development mode with hot reload
    npm run dev
@@ -89,4 +91,4 @@ The application implements centralized error handling with appropriate HTTP stat
 
 ## License
 
-This project is licensed under the ISC License. 
+This project is licensed under the ISC License.
