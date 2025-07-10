@@ -5,7 +5,6 @@ import SignIn from "@/components/SignIn";
 
 import { motion, AnimatePresence } from "framer-motion";
 
-
 type ModalType = "signup" | "signin" | null;
 
 interface ModalContextType {
@@ -69,7 +68,6 @@ export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
           </motion.div>
         )}
       </AnimatePresence>
-
     </ModalContext.Provider>
   );
 };

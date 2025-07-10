@@ -1,12 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const cookieParser = require('cookie-parser');
-const { testConnection } = require('./config/database');
-const { syncDatabase } = require('./models');
-const userRoutes = require('./routes/user.routes');
-const hospitalRoutes = require('./routes/hospital.routes');
+const cookieParser = require("cookie-parser");
+const { testConnection } = require("./config/database");
+const { syncDatabase } = require("./models");
+const userRoutes = require("./routes/user.routes");
+const hospitalRoutes = require("./routes/hospital.routes");
 
 // Test database connection
 testConnection();
@@ -15,10 +15,12 @@ testConnection();
 syncDatabase();
 
 // Middleware
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -30,12 +32,12 @@ app.use(cookieParser());
 // const path = require('path');
 
 // Routes
-app.get('/', (req, res) => {
-    res.send('Hello World');
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
-app.use('/users', userRoutes);
-app.use('/hospitals', hospitalRoutes);
-app.use('/api/user', userRoutes);
+app.use("/users", userRoutes);
+app.use("/hospitals", hospitalRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app;

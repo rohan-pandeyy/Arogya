@@ -3,13 +3,25 @@ import React, { useRef, useEffect } from "react";
 import { useUser } from "@/context/UserContext";
 import { Avatar } from "@heroui/react";
 import { usePathname } from "next/navigation";
-import { useModal } from "@/context/ModalContext"
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@heroui/react";
+import { useModal } from "@/context/ModalContext";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Link,
+  Button,
+} from "@heroui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import UserDropdown from "@/components/ui/userdropdown";
 
 export const ArogyaLogo = () => {
-  return <img src="/arogya_black.svg" width={37} height={37} alt="Arogya Logo" />;
+  return (
+    <img src="/arogya_black.svg" width={37} height={37} alt="Arogya Logo" />
+  );
 };
 
 export default function NavBar() {
@@ -33,10 +45,11 @@ export default function NavBar() {
     { label: "Reports", href: "/my-reports" },
     { label: "About", isDropdown: true },
     { label: "PhysioGya", href: "/physiogya" },
-    { label: "Call an Ambulance", href: "/" }
+    { label: "Call an Ambulance", href: "/" },
   ];
 
-  useEffect(() => {   // close dropdown when clicking outside
+  useEffect(() => {
+    // close dropdown when clicking outside
     function handleClickOutside(event: MouseEvent) {
       if (
         aboutDropdownRef.current &&
@@ -54,7 +67,11 @@ export default function NavBar() {
   }, [aboutDropdown]);
 
   return (
-    <Navbar className="fixed top-0 left-0" shouldHideOnScroll onMenuOpenChange={setIsMenuOpen}>
+    <Navbar
+      className="fixed top-0 left-0"
+      shouldHideOnScroll
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarMenuToggle
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         className="xs:hidden"
@@ -62,19 +79,38 @@ export default function NavBar() {
       <NavbarBrand>
         <Link href="/" color="foreground" className="flex items-center gap-4">
           <ArogyaLogo />
-          <p className="font-bold text-inherit font-specialGothic">Arogya&#8482;</p>
+          <p className="font-bold text-inherit font-specialGothic">
+            Arogya&#8482;
+          </p>
         </Link>
       </NavbarBrand>
 
-      <NavbarContent className="hidden xs:flex gap-6 font-plusjakarta" justify="center">
+      <NavbarContent
+        className="hidden xs:flex gap-6 font-plusjakarta"
+        justify="center"
+      >
         <NavbarItem>
-          <Link href="/book-an-appointment" className={pathname === "/book-an-appointment" ? "text-primary font-semibold" : ""} color="foreground" >
+          <Link
+            href="/book-an-appointment"
+            className={
+              pathname === "/book-an-appointment"
+                ? "text-primary font-semibold"
+                : ""
+            }
+            color="foreground"
+          >
             Appointments
           </Link>
         </NavbarItem>
 
         <NavbarItem>
-          <Link href="/my-reports" className={pathname === "/my-reports" ? "text-primary font-semibold" : ""} color="foreground">
+          <Link
+            href="/my-reports"
+            className={
+              pathname === "/my-reports" ? "text-primary font-semibold" : ""
+            }
+            color="foreground"
+          >
             Reports
           </Link>
         </NavbarItem>
@@ -82,7 +118,7 @@ export default function NavBar() {
         <NavbarItem className="relative">
           <div ref={aboutDropdownRef}>
             <button
-              className={`flex items-center gap-1 hover:text-gray-700 focus:outline-none ${aboutLinks.some(link => link.href === pathname) ? "text-primary font-semibold" : ""}`}
+              className={`flex items-center gap-1 hover:text-gray-700 focus:outline-none ${aboutLinks.some((link) => link.href === pathname) ? "text-primary font-semibold" : ""}`}
               aria-haspopup="true"
               aria-expanded={aboutDropdown}
               onClick={() => setAboutDropdown((v) => !v)}
@@ -93,7 +129,7 @@ export default function NavBar() {
             </button>
             {aboutDropdown && (
               <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50 border">
-                {aboutLinks.map(link => (
+                {aboutLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
@@ -110,7 +146,13 @@ export default function NavBar() {
         </NavbarItem>
 
         <NavbarItem>
-          <Link href="/physiogya" className={pathname === "/physiogya" ? "text-primary font-semibold" : ""} color="foreground">
+          <Link
+            href="/physiogya"
+            className={
+              pathname === "/physiogya" ? "text-primary font-semibold" : ""
+            }
+            color="foreground"
+          >
             PhysioGya
           </Link>
         </NavbarItem>
@@ -118,7 +160,11 @@ export default function NavBar() {
 
       <NavbarContent className="font-plusjakarta" justify="end">
         <NavbarItem className="hidden xxs:block">
-          <Link href="/" className={pathname === "/" ? "text-primary font-semibold" : ""} color="danger">
+          <Link
+            href="/"
+            className={pathname === "/" ? "text-primary font-semibold" : ""}
+            color="danger"
+          >
             Call an Ambulance
           </Link>
         </NavbarItem>
@@ -136,7 +182,11 @@ export default function NavBar() {
             </NavbarItem>*/}
 
             <NavbarItem>
-              <Button onPress={() => openModal("signin")} variant="flat" className="bg-green-500/25 text-green-800 hover:bg-green-500 hover:text-black hover:font-extrabold">
+              <Button
+                onPress={() => openModal("signin")}
+                variant="flat"
+                className="bg-green-500/25 text-green-800 hover:bg-green-500 hover:text-black hover:font-extrabold"
+              >
                 Sign In
               </Button>
             </NavbarItem>
@@ -151,32 +201,35 @@ export default function NavBar() {
               <React.Fragment key="about-dropdown">
                 <NavbarMenuItem className="border-b">
                   <button
-                    className={`flex items-center justify-between w-full py-3 font-plusjakarta ${aboutLinks.some(link => link.href === pathname) ? "text-primary font-semibold" : ""}`}
+                    className={`flex items-center justify-between w-full py-3 font-plusjakarta ${aboutLinks.some((link) => link.href === pathname) ? "text-primary font-semibold" : ""}`}
                     onClick={() => setAboutMenuOpen((v) => !v)}
                     aria-haspopup="true"
                     aria-expanded={aboutMenuOpen}
                     type="button"
                   >
                     About
-                    <ChevronDownIcon className={`w-4 h-4 transition-transform ${aboutMenuOpen ? "rotate-180" : ""}`} />
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform ${aboutMenuOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
                 </NavbarMenuItem>
-                {aboutMenuOpen && aboutLinks.map(link => (
-                  <NavbarMenuItem key={link.href} className="border-b pl-6">
-                    <Link
-                      className={`font-plusjakarta w-full py-3 ${pathname === link.href ? "text-primary font-semibold" : ""}`}
-                      color="foreground"
-                      href={link.href}
-                      size="lg"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        setAboutMenuOpen(false);
-                      }}
-                    >
-                      {link.label}
-                    </Link>
-                  </NavbarMenuItem>
-                ))}
+                {aboutMenuOpen &&
+                  aboutLinks.map((link) => (
+                    <NavbarMenuItem key={link.href} className="border-b pl-6">
+                      <Link
+                        className={`font-plusjakarta w-full py-3 ${pathname === link.href ? "text-primary font-semibold" : ""}`}
+                        color="foreground"
+                        href={link.href}
+                        size="lg"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setAboutMenuOpen(false);
+                        }}
+                      >
+                        {link.label}
+                      </Link>
+                    </NavbarMenuItem>
+                  ))}
               </React.Fragment>
             );
           }

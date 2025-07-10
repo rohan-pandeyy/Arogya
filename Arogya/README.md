@@ -5,24 +5,23 @@ This document explains how the frontend of the Arogya application interacts with
 ---
 
 ## 🌍 Base URL Handling
+
 The application dynamically determines the API base URL depending on the runtime context:
 
 - **Server-side (SSR, inside Docker):**
-Uses `process.env.INTERNAL_API_URL` if set, otherwise defaults to `http://localhost:80`.
+  Uses `process.env.INTERNAL_API_URL` if set, otherwise defaults to `http://localhost:80`.
 
 - **Client-side (browser):**
-Uses `process.env.NEXT_PUBLIC_API_URL` if set, otherwise defaults to `http://localhost:5000`.
-
-
+  Uses `process.env.NEXT_PUBLIC_API_URL` if set, otherwise defaults to `http://localhost:5000`.
 
 ## 📡 API Endpoint Summary
 
-| Action           | HTTP Method | Path                      | Description                          |
-|------------------|-------------|---------------------------|--------------------------------------|
-| Register User    | POST        | `/users/register`         | Registers a new user and returns token + user details |
-| Login User       | POST        | `/users/login`            | Authenticates user, sets auth cookie, returns user data |
-| Get User Profile | GET         | `/users/profile`          | Fetches user details (protected route using token cookie) |
-| Logout User      | GET         | `/users/logout`           | Logs out the user and clears the token cookie |
+| Action           | HTTP Method | Path              | Description                                               |
+| ---------------- | ----------- | ----------------- | --------------------------------------------------------- |
+| Register User    | POST        | `/users/register` | Registers a new user and returns token + user details     |
+| Login User       | POST        | `/users/login`    | Authenticates user, sets auth cookie, returns user data   |
+| Get User Profile | GET         | `/users/profile`  | Fetches user details (protected route using token cookie) |
+| Logout User      | GET         | `/users/logout`   | Logs out the user and clears the token cookie             |
 
 ---
 
@@ -47,7 +46,7 @@ const res = await fetch(`${getBaseUrl()}/users/register`, {
     "Content-Type": "application/json",
   },
   body: JSON.stringify(data),
-  credentials: "include"
+  credentials: "include",
 });
 ```
 

@@ -10,8 +10,7 @@ import {
 } from "@heroui/react";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { getBaseUrl } from '@/lib/getBaseUrl';
-
+import { getBaseUrl } from "@/lib/getBaseUrl";
 
 export const PlusIcon = (props: any) => (
   <svg
@@ -48,7 +47,7 @@ export default function UserDropdown() {
         method: "POST",
         credentials: "include",
       });
-  
+
       if (res.ok) {
         setUser(null); 
         router.push("/"); // redirect to homepage
@@ -68,7 +67,8 @@ export default function UserDropdown() {
       showArrow
       classNames={{
         base: "before:bg-default-200",
-        content: "p-0 border-small border-divider bg-[#e4ffe8] text-white font-inter",
+        content:
+          "p-0 border-small border-divider bg-[#e4ffe8] text-white font-inter",
       }}
       radius="sm"
     >
@@ -106,7 +106,11 @@ export default function UserDropdown() {
         }}
       >
         <DropdownSection showDivider aria-label="Profile & Actions">
-          <DropdownItem key="profile" isReadOnly className="h-14 gap-2 opacity-100">
+          <DropdownItem
+            key="profile"
+            isReadOnly
+            className="h-14 gap-2 opacity-100"
+          >
             <User
               avatarProps={{
                 size: "sm",

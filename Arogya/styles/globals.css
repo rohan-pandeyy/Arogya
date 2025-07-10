@@ -3,29 +3,29 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'FunnelSans';
-    src: url('/fonts/FunnelSans-Regular.ttf') format('ttf');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: "FunnelSans";
+  src: url("/fonts/FunnelSans-Regular.ttf") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
 
 @font-face {
-    font-family: 'Open Sans';
-    src: url('/fonts/OpenSans-Regular.ttf') format('ttf');
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-@font-face {
-    font-family: 'SpecialGothicExpandedOne';
-    src: url('/fonts/SpecialGothicExpandedOne-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
+  font-family: "Open Sans";
+  src: url("/fonts/OpenSans-Regular.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+}
 
 @font-face {
-  font-family: 'PlusJakartaSans';
-  src: url('/fonts/PlusJakartaSans-VariableFont_wght.ttf') format('truetype');
+  font-family: "SpecialGothicExpandedOne";
+  src: url("/fonts/SpecialGothicExpandedOne-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PlusJakartaSans";
+  src: url("/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype");
   font-weight: 100 700; /* adjust range if needed */
   font-style: normal;
   font-display: swap;
