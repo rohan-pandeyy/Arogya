@@ -8,6 +8,7 @@
 │       ├── ci.yml
 │       └── update-project-structure.yml
 ├── .gitignore
+├── .prettierrc
 ├── Arogya/
 │   ├── .dockerignore
 │   ├── .env
@@ -46,7 +47,6 @@
 │   ├── context/
 │   │   ├── ModalContext.tsx
 │   │   └── UserContext.tsx
-│   ├── eslint.config.mjs
 │   ├── lib/
 │   │   ├── getBaseUrl.ts
 │   │   ├── getUser.ts
@@ -122,6 +122,7 @@
 │       └── backend_javascript/
 │           └── api.md
 ├── README.md
-└── docker-compose.yaml
+├── docker-compose.yaml
+└── eslint.config.mjs
 
-34 directories, 91 files
+34 directories, 92 files
