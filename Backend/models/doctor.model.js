@@ -1,10 +1,10 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/database");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const Doctor = sequelize.define(
-  "Doctor",
+  'Doctor',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -53,7 +53,7 @@ const Doctor = sequelize.define(
         }
       },
       beforeUpdate: async (doctor) => {
-        if (doctor.changed("password")) {
+        if (doctor.changed('password')) {
           doctor.password = await bcrypt.hash(doctor.password, 10);
         }
       },
@@ -64,7 +64,7 @@ const Doctor = sequelize.define(
 // Instance methods
 Doctor.prototype.generateAuthToken = function () {
   return jwt.sign({ id: this.id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "24h",
+    expiresIn: '24h',
   });
 };
 

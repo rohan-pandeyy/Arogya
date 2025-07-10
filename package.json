@@ -1,0 +1,23 @@
+{
+  "name": "arogya",
+  "version": "1.0.0",
+  "description": "<a id=\"readme-top\"></a>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohan-pandeyy/Arogya.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rohan-pandeyy/Arogya/issues"
+  },
+  "homepage": "https://github.com/rohan-pandeyy/Arogya#readme",
+  "devDependencies": {
+    "eslint": "^9.30.1"
+  }
+}

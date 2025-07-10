@@ -1,5 +1,5 @@
-const { Hospital, Doctor } = require("../models");
-const { validationResult } = require("express-validator");
+const { Hospital, Doctor } = require('../models');
+const { validationResult } = require('express-validator');
 
 // Get all hospitals
 module.exports.getAllHospitals = async (req, res) => {
@@ -8,14 +8,14 @@ module.exports.getAllHospitals = async (req, res) => {
       include: [
         {
           model: Doctor,
-          attributes: ["id", "name", "specialization"],
+          attributes: ['id', 'name', 'specialization'],
         },
       ],
     });
     res.status(200).json(hospitals);
   } catch (error) {
-    console.error("Error fetching hospitals:", error);
-    res.status(500).json({ message: "Error fetching hospitals" });
+    console.error('Error fetching hospitals:', error);
+    res.status(500).json({ message: 'Error fetching hospitals' });
   }
 };
 
@@ -26,19 +26,19 @@ module.exports.getHospitalById = async (req, res) => {
       include: [
         {
           model: Doctor,
-          attributes: ["id", "name", "specialization"],
+          attributes: ['id', 'name', 'specialization'],
         },
       ],
     });
 
     if (!hospital) {
-      return res.status(404).json({ message: "Hospital not found" });
+      return res.status(404).json({ message: 'Hospital not found' });
     }
 
     res.status(200).json(hospital);
   } catch (error) {
-    console.error("Error fetching hospital:", error);
-    res.status(500).json({ message: "Error fetching hospital" });
+    console.error('Error fetching hospital:', error);
+    res.status(500).json({ message: 'Error fetching hospital' });
   }
 };
 
@@ -74,8 +74,8 @@ module.exports.createHospital = async (req, res) => {
 
     res.status(201).json(hospital);
   } catch (error) {
-    console.error("Error creating hospital:", error);
-    res.status(500).json({ message: "Error creating hospital" });
+    console.error('Error creating hospital:', error);
+    res.status(500).json({ message: 'Error creating hospital' });
   }
 };
 
@@ -89,14 +89,14 @@ module.exports.updateHospital = async (req, res) => {
   try {
     const hospital = await Hospital.findByPk(req.params.id);
     if (!hospital) {
-      return res.status(404).json({ message: "Hospital not found" });
+      return res.status(404).json({ message: 'Hospital not found' });
     }
 
     await hospital.update(req.body);
     res.status(200).json(hospital);
   } catch (error) {
-    console.error("Error updating hospital:", error);
-    res.status(500).json({ message: "Error updating hospital" });
+    console.error('Error updating hospital:', error);
+    res.status(500).json({ message: 'Error updating hospital' });
   }
 };
 
@@ -105,13 +105,13 @@ module.exports.deleteHospital = async (req, res) => {
   try {
     const hospital = await Hospital.findByPk(req.params.id);
     if (!hospital) {
-      return res.status(404).json({ message: "Hospital not found" });
+      return res.status(404).json({ message: 'Hospital not found' });
     }
 
     await hospital.destroy();
-    res.status(200).json({ message: "Hospital deleted successfully" });
+    res.status(200).json({ message: 'Hospital deleted successfully' });
   } catch (error) {
-    console.error("Error deleting hospital:", error);
-    res.status(500).json({ message: "Error deleting hospital" });
+    console.error('Error deleting hospital:', error);
+    res.status(500).json({ message: 'Error deleting hospital' });
   }
 };

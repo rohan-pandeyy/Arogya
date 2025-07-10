@@ -1,6 +1,8 @@
 # Docker Setup for Local Development
 
-This project provides a ready-to-use Docker development environment with hot-reloading support for both the frontend `(Next.js)` and backend `(Express + PostgreSQL)`.
+This project provides a ready-to-use Docker development environment with
+hot-reloading support for both the frontend `(Next.js)` and backend
+`(Express + PostgreSQL)`.
 
 ## Prerequisites
 
@@ -23,7 +25,8 @@ docker-compose --version
    git clone https://github.com/<your-username>/arogya.git
    cd arogya
    ```
-2. Environment Variables: Make sure you change the `<username>` & `<password>` according to your local dev needs in `Backend/.env.docker`
+2. Environment Variables: Make sure you change the `<username>` & `<password>`
+   according to your local dev needs in `Backend/.env.docker`
    ```init
    PORT=80
    DATABASE_URL=postgres://<username>:<password>@db:5432/arogya_db

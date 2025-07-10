@@ -1,8 +1,12 @@
 # Contributing to Arogya
 
-Hi there! Welcome to Arogya, we're excited to have you. Whether you're fixing a bug, adding a new feature or improving documentation, your contributions are greatly appreciated.
+Hi there! Welcome to Arogya, we're excited to have you. Whether you're fixing a
+bug, adding a new feature or improving documentation, your contributions are
+greatly appreciated.
 
-To help you get started, please review this contribution guide and check out any open issues or feature requests. If you have questions or ideas, feel free to open an issue or start a discussion.
+To help you get started, please review this contribution guide and check out any
+open issues or feature requests. If you have questions or ideas, feel free to
+open an issue or start a discussion.
 
 ## Setting Up the Project
 
@@ -19,4 +23,6 @@ To help you get started, please review this contribution guide and check out any
 
 ### Troubleshooting
 
-If you encounter any issues, please check the respective documentation for Next, Node or Express. For persistent problems, feel free to open an issue in the project repository.
+If you encounter any issues, please check the respective documentation for Next,
+Node or Express. For persistent problems, feel free to open an issue in the
+project repository.

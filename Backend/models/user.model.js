@@ -1,10 +1,10 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/database");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const User = sequelize.define(
-  "User",
+  'User',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -35,38 +35,38 @@ const User = sequelize.define(
       allowNull: false,
     },
     gender: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isIn: [['male', 'female', 'other']]
-        }
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['male', 'female', 'other']],
+      },
     },
     address: {
-        type: DataTypes.STRING,
-        allowNull: true
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     phone: {
-        type: DataTypes.BIGINT,
-        allowNull: true
+      type: DataTypes.BIGINT,
+      allowNull: true,
     },
     dob: {
-        type: DataTypes.DATEONLY,
-        allowNull: true
+      type: DataTypes.DATEONLY,
+      allowNull: true,
     },
     bloodGroup: {
-        type: DataTypes.STRING,
-        allowNull: true
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     diagnosis: {
-        type: DataTypes.STRING,
-        allowNull: true
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     allergies: {
-        type: DataTypes.STRING,
-        allowNull: true
-    }    
-    
-}, {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  },
+  {
     timestamps: true,
     hooks: {
       beforeCreate: async (user) => {
@@ -75,7 +75,7 @@ const User = sequelize.define(
         }
       },
       beforeUpdate: async (user) => {
-        if (user.changed("password")) {
+        if (user.changed('password')) {
           user.password = await bcrypt.hash(user.password, 10);
         }
       },
@@ -86,7 +86,7 @@ const User = sequelize.define(
 // Instance methods
 User.prototype.generateAuthToken = function () {
   return jwt.sign({ id: this.id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "24h",
+    expiresIn: '24h',
   });
 };
 

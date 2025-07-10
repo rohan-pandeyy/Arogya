@@ -1,7 +1,9 @@
 # API
 
-The API calls to **Arogya** are done via HTTP requests, since we are hosting our backend on a Node server. This was done to ensure low coupling between the frontend and the backend.
-Follow this [Link]() to get example requests and responses.
+The API calls to **Arogya** are done via HTTP requests, since we are hosting our
+backend on a Node server. This was done to ensure low coupling between the
+frontend and the backend. Follow this [Link]() to get example requests and
+responses.
 
 ## Table of Contents
 
@@ -168,7 +170,8 @@ Creates a new user account in the system.
 
 `POST /users/login`
 
-Authenticates a user and returns their information along with an authentication token.
+Authenticates a user and returns their information along with an authentication
+token.
 
 ##### Request Body
 

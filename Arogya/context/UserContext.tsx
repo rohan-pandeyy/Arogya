@@ -1,12 +1,12 @@
 // context/UserContext.tsx
-"use client";
+'use client';
 import React, {
   createContext,
   useContext,
   useState,
   useEffect,
   ReactNode,
-} from "react";
+} from 'react';
 
 type User = {
   id: number;
@@ -35,11 +35,11 @@ export const UserProvider = ({
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost/api/user/profile", {
-          credentials: "include",
+        const res = await fetch('http://localhost/api/user/profile', {
+          credentials: 'include',
         });
 
-        if (!res.ok) throw new Error("Failed to fetch");
+        if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         setUser(data);
       } catch (err) {
@@ -60,7 +60,7 @@ export const UserProvider = ({
 export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error("useUser must be used within a UserProvider");
+    throw new Error('useUser must be used within a UserProvider');
   }
   return context;
 };

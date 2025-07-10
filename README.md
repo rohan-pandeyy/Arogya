@@ -48,37 +48,55 @@
 
 [![Arogya Banner](Docs/assets/AROGYA_banner.svg)]()
 
-Arogya is a comprehensive medical solution available as both, website and specialized mobile application. Patients can book appointments at hospitals & clinics with doctors, call for the nearest available ambulance in case of emergency, with features such as ride booking, real-time tracking, fare estimates, and various safety measures.
+Arogya is a comprehensive medical solution available as both, website and
+specialized mobile application. Patients can book appointments at hospitals &
+clinics with doctors, call for the nearest available ambulance in case of
+emergency, with features such as ride booking, real-time tracking, fare
+estimates, and various safety measures.
 
 #### Key Highlight Feature -
 
-We have also developed a _smart physiotherapy device_ where patients use our app which seemlessly connects to a smart sensor (extremely cheap) that tracks and logs joint motion for at-home physiotherapy.
+We have also developed a _smart physiotherapy device_ where patients use our app
+which seemlessly connects to a smart sensor (extremely cheap) that tracks and
+logs joint motion for at-home physiotherapy.
 
-- All information is safely stored for precise progress monitoring which even doctors can access.
-- The app algorithm offers concise workout plans for each joint to enable focused and efficient at-home rehabilitation.
-- For added convenience, users can schedule physiotherapy sessions through the app.
+- All information is safely stored for precise progress monitoring which even
+  doctors can access.
+- The app algorithm offers concise workout plans for each joint to enable
+  focused and efficient at-home rehabilitation.
+- For added convenience, users can schedule physiotherapy sessions through the
+  app.
 
-Arogya makes it simple for medical professionals to plan and oversee upcoming sessions. By combining intelligent technology, personalized care, seamless connectivity, Arogya enables both professionals and users to achieve better results.
+Arogya makes it simple for medical professionals to plan and oversee upcoming
+sessions. By combining intelligent technology, personalized care, seamless
+connectivity, Arogya enables both professionals and users to
+achieve better results.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Here to Contribute?
 
-For detailed setup instructions, coding guidelines, and the contribution process, please check out the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+For detailed setup instructions, coding guidelines, and the contribution
+process, please check out the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Built With
 
-- ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white) ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white) ![Blender](https://img.shields.io/badge/blender-%23F5792A.svg?style=for-the-badge&logo=blender&logoColor=white)
+- ![Unity](https://img.shields.io/badge/unity-%23000000.svg?style=for-the-badge&logo=unity&logoColor=white)
+  ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
+  ![Blender](https://img.shields.io/badge/blender-%23F5792A.svg?style=for-the-badge&logo=blender&logoColor=white)
 
-- ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+- ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+  ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-- ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white) ![Espressif](https://img.shields.io/badge/espressif-E7352C.svg?style=for-the-badge&logo=espressif&logoColor=white)
+- ![Arduino](https://img.shields.io/badge/-Arduino-00979D?style=for-the-badge&logo=Arduino&logoColor=white)
+  ![Espressif](https://img.shields.io/badge/espressif-E7352C.svg?style=for-the-badge&logo=espressif&logoColor=white)
 
 - ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
-- ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+- ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
+  ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -108,13 +126,17 @@ For detailed setup instructions, coding guidelines, and the contribution process
 ## Contact
 
 Rohan Pandey - `rohan1706pandey@gmail.com`</br>
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rohan-pandey-a9a50b270/) [![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/rohan-pandeyy) [![Twitter](https://img.shields.io/badge/Twitter-%231DA1F2.svg?logo=X&logoColor=white)](https://twitter.com/rohan_pandeyy)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rohan-pandey-a9a50b270/)
+[![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/rohan-pandeyy)
+[![Twitter](https://img.shields.io/badge/Twitter-%231DA1F2.svg?logo=X&logoColor=white)](https://twitter.com/rohan_pandeyy)
 
 Dhruv Kumar - `dhruv.kumar2782@gmail.com`</br>
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dhruvk27/) [![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/dhruvk278)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dhruvk27/)
+[![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/dhruvk278)
 
 Avanish Kumar - `avinish05@gmail.com`</br>
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/avanish-kumar-1765b2231/) [![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/Avan1sh)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/avanish-kumar-1765b2231/)
+[![Github](https://img.shields.io/badge/Github-%23121011.svg?logo=github&logoColor=white)](https://github.com/Avan1sh)
 
 <!-- ACKNOWLEDGMENTS -->
 

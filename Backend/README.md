@@ -1,6 +1,8 @@
 # Arogya Backend
 
-This is the backend server for the Arogya application, built using Node.js and Express.js. The backend provides a robust API layer for the Arogya healthcare platform, handling user authentication, data management, and business logic.
+This is the backend server for the Arogya application, built using Node.js and
+Express.js. The backend provides a robust API layer for the Arogya healthcare
+platform, handling user authentication, data management, and business logic.
 
 ## Tech Stack
 
@@ -63,7 +65,8 @@ Backend/
 
 ## Development
 
-- The server runs on port 3000 by default (configurable via environment variables)
+- The server runs on port 3000 by default (configurable via environment
+  variables)
 - API documentation is available in the `/docs` directory
 - The application follows MVC (Model-View-Controller) architecture
 - Sequelize is used as the ORM for database operations
@@ -79,7 +82,8 @@ Backend/
 
 ## Error Handling
 
-The application implements centralized error handling with appropriate HTTP status codes and error messages for different scenarios.
+The application implements centralized error handling with appropriate HTTP
+status codes and error messages for different scenarios.
 
 ## Contributing
 

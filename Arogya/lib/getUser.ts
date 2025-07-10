@@ -1,10 +1,10 @@
-import { cookies } from "next/headers";
-import { getBaseUrl } from "@/lib/getBaseUrl";
+import { cookies } from 'next/headers';
+import { getBaseUrl } from '@/lib/getBaseUrl';
 
 export async function getUserFromCookies() {
   const cookieStore = await cookies();
 
-  const token = cookieStore.get("token");
+  const token = cookieStore.get('token');
   if (!token?.value) return null;
 
   try {
@@ -12,8 +12,8 @@ export async function getUserFromCookies() {
       headers: {
         Cookie: `token=${token.value}`,
       },
-      credentials: "include",
-      cache: "no-store",
+      credentials: 'include',
+      cache: 'no-store',
     });
 
     if (!res.ok) return null;
@@ -21,7 +21,7 @@ export async function getUserFromCookies() {
     const data = await res.json();
     return data;
   } catch (err) {
-    console.error("Failed to fetch user:", err);
+    console.error('Failed to fetch user:', err);
     return null;
   }
 }

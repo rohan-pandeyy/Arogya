@@ -1,4 +1,4 @@
-import HeroSection from "@/pages/CallAmbulancePage/HeroSection";
+import HeroSection from '@/pages/CallAmbulancePage/HeroSection';
 
 export default function Home() {
   return (
