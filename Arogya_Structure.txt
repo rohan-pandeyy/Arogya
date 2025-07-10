@@ -1,0 +1,127 @@
+./
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug.yml
+│   │   ├── documentation.yml
+│   │   └── feature.yml
+│   └── workflows/
+│       ├── ci.yml
+│       └── update-project-structure.yml
+├── .gitignore
+├── Arogya/
+│   ├── .dockerignore
+│   ├── .env
+│   ├── .env.docker
+│   ├── .gitignore
+│   ├── .npmrc
+│   ├── Dockerfile
+│   ├── LICENSE
+│   ├── README.md
+│   ├── app/
+│   │   ├── about-us/
+│   │   │   └── page.tsx
+│   │   ├── blog/
+│   │   │   └── page.tsx
+│   │   ├── dashboard/
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── NavBar.tsx
+│   │   ├── SignIn.tsx
+│   │   ├── SignUp.tsx
+│   │   ├── sidebar.tsx
+│   │   └── ui/
+│   │       ├── 3d-card.tsx
+│   │       ├── card-hover-effect.tsx
+│   │       ├── colourful-text.tsx
+│   │       ├── morph-background.tsx
+│   │       ├── sidebar.tsx
+│   │       ├── userdropdown.tsx
+│   │       └── vortex.tsx
+│   ├── config/
+│   │   ├── fonts.ts
+│   │   └── site.ts
+│   ├── context/
+│   │   ├── ModalContext.tsx
+│   │   └── UserContext.tsx
+│   ├── eslint.config.mjs
+│   ├── lib/
+│   │   ├── getBaseUrl.ts
+│   │   ├── getUser.ts
+│   │   └── utils.ts
+│   ├── next.config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── pages/
+│   │   ├── AboutUsPage/
+│   │   │   ├── HeroSection.tsx
+│   │   │   └── MissionSection.tsx
+│   │   ├── BlogPage/
+│   │   │   └── HeroSection.tsx
+│   │   └── CallAmbulancePage/
+│   │       └── HeroSection.tsx
+│   ├── postcss.config.js
+│   ├── public/
+│   │   ├── arogya_black.svg
+│   │   ├── arogya_white.svg
+│   │   ├── arogya_whiteWborder.svg
+│   │   ├── assets/
+│   │   │   ├── layered-waves.svg
+│   │   │   └── mission&vision.avif
+│   │   ├── favicon.ico
+│   │   └── fonts/
+│   │       ├── FunnelSans-Regular.ttf
+│   │       ├── FunnelSans-SemiBold.ttf
+│   │       ├── OpenSans-Regular.ttf
+│   │       ├── PlusJakartaSans-VariableFont_wght.ttf
+│   │       └── SpecialGothicExpandedOne-Regular.ttf
+│   ├── styles/
+│   │   └── globals.css
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   └── types/
+│       └── index.ts
+├── Arogya_Structure.txt
+├── Backend/
+│   ├── .dockerignore
+│   ├── .env.docker
+│   ├── Dockerfile
+│   ├── README.md
+│   ├── app.js
+│   ├── config/
+│   │   └── database.js
+│   ├── controllers/
+│   │   ├── hospital.controller.js
+│   │   └── user.controller.js
+│   ├── middlewares/
+│   │   └── auth.middleware.js
+│   ├── models/
+│   │   ├── blacklistToken.model.js
+│   │   ├── doctor.model.js
+│   │   ├── hospital.model.js
+│   │   ├── index.js
+│   │   ├── sql_schema.sql
+│   │   └── user.model.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── routes/
+│   │   ├── hospital.routes.js
+│   │   └── user.routes.js
+│   ├── server.js
+│   └── services/
+│       └── user.service.js
+├── CONTRIBUTING.md
+├── Docs/
+│   ├── Docker_Setup_Guide.md
+│   ├── Manual_Setup_Guide.md
+│   ├── assets/
+│   │   └── AROGYA_banner.svg
+│   └── backend/
+│       └── backend_javascript/
+│           └── api.md
+├── README.md
+└── docker-compose.yaml
+
+34 directories, 91 files
