@@ -4,24 +4,29 @@ const Hospital = require('./hospital.model');
 const BlacklistToken = require('./blacklistToken.model');
 const { sequelize } = require('../config/database');
 
-// Define associations
-Doctor.belongsToMany(Hospital, { through: 'doctor_hospitals' });
-Hospital.belongsToMany(Doctor, { through: 'doctor_hospitals' });
+// 🔁 Correct One-to-Many Relationship (Doctor → Hospital)
+Hospital.hasMany(Doctor, { foreignKey: "hospitalId", onDelete: "CASCADE" });
+Doctor.belongsTo(Hospital, { foreignKey: "hospitalId" });
 
-User.belongsTo(Doctor, { as: 'primaryDoctor' });
-Doctor.hasMany(User, { as: 'patients' });
+
+// Optional: User Relationships (unchanged)
+User.belongsTo(Doctor, { as: "primaryDoctor" });
+Doctor.hasMany(User, { as: "patients" });
 
 User.belongsToMany(Hospital, {
   through: 'user_hospitals',
   as: 'preferredHospitals',
 });
-Hospital.belongsToMany(User, { through: 'user_hospitals', as: 'patients' });
+Hospital.belongsToMany(User, {
+  through: "user_hospitals",
+  as: "patients",
+});
 
-// Sync all models with database
+// ✅ Sync all models
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true });
-    console.log('Database synced successfully');
+    await sequelize.sync({ alter: true }); // or { force: true } for full reset
+    console.log("Database synced successfully");
   } catch (error) {
     console.error('Error syncing database:', error);
   }

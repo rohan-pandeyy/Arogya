@@ -2,11 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const cookieParser = require('cookie-parser');
-const { testConnection } = require('./config/database');
-const { syncDatabase } = require('./models');
-const userRoutes = require('./routes/user.routes');
-const hospitalRoutes = require('./routes/hospital.routes');
+const cookieParser = require("cookie-parser");
+const { testConnection } = require("./config/database");
+const { syncDatabase } = require("./models");
+const userRoutes = require("./routes/user.routes");
+const hospitalRoutes = require("./routes/hospital.routes");
+const doctorRoutes = require("./routes/doctor.routes");
 
 // Test database connection
 testConnection();
@@ -36,8 +37,9 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-app.use('/users', userRoutes);
-app.use('/hospitals', hospitalRoutes);
-app.use('/api/user', userRoutes);
+app.use("/users", userRoutes);
+app.use("/hospitals", hospitalRoutes);
+app.use("/api/user", userRoutes);
+app.use("/doctors", doctorRoutes);
 
 module.exports = app;

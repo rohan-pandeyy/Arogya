@@ -1,7 +1,8 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/database');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/database");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const Hospital = require("./hospital.model"); // ⬅️ Required for association
 
 const Doctor = sequelize.define(
   'Doctor',
@@ -43,6 +44,14 @@ const Doctor = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    hospitalId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Hospital,
+        key: "id",
+      },
+    },
   },
   {
     timestamps: true,
@@ -58,8 +67,12 @@ const Doctor = sequelize.define(
         }
       },
     },
-  },
+  }
 );
+
+// Associations
+Doctor.belongsTo(Hospital, { foreignKey: "hospitalId" });
+Hospital.hasMany(Doctor, { foreignKey: "hospitalId", onDelete: "CASCADE" });
 
 // Instance methods
 Doctor.prototype.generateAuthToken = function () {
