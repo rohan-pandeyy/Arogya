@@ -1,0 +1,55 @@
+name: CI Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-backend:
+    name: Lint & Type Check - Backend
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./Backend
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint . --ext .js
+
+  lint-frontend:
+    name: Lint & Type Check - Frontend
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./Arogya
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint . --ext .ts,.tsx
+
+      - name: Type Check (tsc)
+        run: npx tsc --noEmit
