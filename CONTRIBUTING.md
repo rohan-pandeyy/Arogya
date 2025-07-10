@@ -8,8 +8,8 @@ To help you get started, please review this contribution guide and check out any
 
 ### Setup
 
-1. Set Manually: [Guide](docs/Manual_Setup_Guide.md)
-2. Docker Setup: [Guide](docs/Docker_Setup_Guide.md)
+1. Set Manually: [Guide](Docs/Manual_Setup_Guide.md)
+2. Docker Setup: [Guide](Docs/Docker_Setup_Guide.md)
 
 ### Additional Resources:
 

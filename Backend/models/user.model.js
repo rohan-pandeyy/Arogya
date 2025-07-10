@@ -38,7 +38,32 @@ const User = sequelize.define('User', {
         validate: {
             isIn: [['male', 'female', 'other']]
         }
-    }
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    phone: {
+        type: DataTypes.BIGINT,
+        allowNull: true
+    },
+    dob: {
+        type: DataTypes.DATEONLY,
+        allowNull: true
+    },
+    bloodGroup: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    diagnosis: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    allergies: {
+        type: DataTypes.STRING,
+        allowNull: true
+    }    
+    
 }, {
     timestamps: true,
     hooks: {

@@ -136,3 +136,43 @@ module.exports.logoutUser = async (req, res, next) => {
         res.status(500).json({ message: 'Error logging out' });
     }
 };
+
+module.exports.updateUserProfile = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const {
+            dob,
+            address,
+            phone,
+            bloodGroup,
+            diagnosis,
+            allergies,
+            age
+        } = req.body;
+
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        user.dob = dob;
+        user.address = address;
+        user.phone = phone;
+        user.bloodGroup = bloodGroup;
+        user.diagnosis = diagnosis;
+        user.allergies = allergies;
+        if (age) user.age = age;
+
+        await user.save();
+
+        const updatedData = user.toJSON();
+        delete updatedData.password;
+
+        res.status(200).json({ message: "Profile updated", user: updatedData });
+    } catch (error) {
+        console.error("Update profile error:", error);
+        res.status(500).json({ message: "Error updating profile" });
+    }
+};

@@ -39,7 +39,7 @@ export const PlusIcon = (props: any) => (
 
 export default function UserDropdown() {
   const { user } = useUser();
-  const { setUser } = useUser(); // ✅ correct
+  const { setUser } = useUser();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -50,8 +50,8 @@ export default function UserDropdown() {
       });
   
       if (res.ok) {
-        setUser(null); // clear user context
-        router.push("/"); // redirect to homepage or login
+        setUser(null); 
+        router.push("/"); // redirect to homepage
       }
     } catch (err) {
       console.error("Logout failed", err);
@@ -113,26 +113,26 @@ export default function UserDropdown() {
                 name: initial,
               }}
               classNames={{
-                name: "text-default-600",
-                description: "text-default-500",
+                name: "font-opensans",
+                description: "font-opensans",
               }}
               name={firstName}
               description={user.email}
             />
           </DropdownItem>
-          <DropdownItem key="dashboard" onClick={() => router.push("/dashboard")}>
+          <DropdownItem key="dashboard" onClick={() => router.push("/dashboard")} className="font-opensans">
               Dashboard
             </DropdownItem>
-          <DropdownItem key="settings" onClick={() => router.push("/user-dashboard")}>Settings</DropdownItem>
-          <DropdownItem key="enquire" endContent={<PlusIcon className="text-large" />}>
+          <DropdownItem key="settings" onClick={() => router.push("/user-dashboard")} className="font-opensans">Settings</DropdownItem>
+          <DropdownItem key="enquire" endContent={<PlusIcon className="text-large" />} className="font-opensans">
             Enquire
           </DropdownItem>
         </DropdownSection>
 
         <DropdownSection aria-label="Help & Feedback">
-          <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-          <DropdownItem key="logout"
-           className="!text-red-500 hover:!text-white hover:!bg-red-500" onClick={handleLogout}>Log Out </DropdownItem>
+          <DropdownItem key="help_and_feedback" className="font-opensans">Help & Feedback</DropdownItem>
+          <DropdownItem key="logout" 
+           className="!text-red-500 hover:!text-white hover:!bg-red-500 font-opensans" onClick={handleLogout}>Log Out </DropdownItem>
         </DropdownSection>
       </DropdownMenu>
     </Dropdown>
