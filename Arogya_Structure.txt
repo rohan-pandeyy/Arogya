@@ -93,6 +93,7 @@
 │   ├── config/
 │   │   └── database.js
 │   ├── controllers/
+│   │   ├── doctor.controller.js
 │   │   ├── hospital.controller.js
 │   │   └── user.controller.js
 │   ├── middlewares/
@@ -107,6 +108,7 @@
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── routes/
+│   │   ├── doctor.routes.js
 │   │   ├── hospital.routes.js
 │   │   └── user.routes.js
 │   ├── server.js
@@ -127,4 +129,4 @@
 ├── package-lock.json
 └── package.json
 
-34 directories, 94 files
+34 directories, 96 files
