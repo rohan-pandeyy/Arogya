@@ -22,9 +22,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install tree -y
 
       - name: Generate structure file
-        run: tree -I "node_modules|.git|.next|dist|coverage" -a -F > Arogya_Structure.txt
+        run:
+          tree -I "node_modules|.git|.next|dist|coverage" -a -F >
+          Arogya_Structure.txt
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: update project structure"
+          commit_message: 'chore: update project structure'

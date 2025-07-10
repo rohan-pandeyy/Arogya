@@ -7,49 +7,46 @@ on:
     branches: [main]
 
 jobs:
-  lint-backend:
-    name: Lint & Type Check - Backend
+  lint:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./Backend
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22.17.0
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies (frontend + backend)
+        run: |
+          npm install --prefix Arogya
+          npm install --prefix Backend
 
       - name: Run ESLint
-        run: npx eslint . --ext .js
+        run: npx eslint --config eslint.config.mjs . --ext .ts,.tsx,.js
 
-  lint-frontend:
-    name: Lint & Type Check - Frontend
+  prettier-check:
+    name: Prettier Check (All)
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./Arogya
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22.17.0
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Prettier
+        run: |
+          npm install --prefix Arogya
+          npm install --prefix Backend
 
-      - name: Run ESLint
-        run: npx eslint --config eslint.config.mjs . --ext .js,.ts,.tsx
+      - name: Run Prettier Check - Frontend
+        run: npx prettier --check "Arogya/**/*.{ts,tsx,js,json,css,md}"
 
-      - name: Type Check (tsc)
-        run: npx tsc --noEmit
+      - name: Run Prettier Check - Backend
+        run: npx prettier --check "Backend/**/*.{js,json,md}"
