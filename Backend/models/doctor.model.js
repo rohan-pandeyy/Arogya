@@ -2,15 +2,16 @@ const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Hospital = require("./hospital.model"); // ⬅️ Required for association
+const Hospital = require("./hospital.model");
 
 const Doctor = sequelize.define(
-  'Doctor',
+  "Doctor",
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
+    licenseNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      primaryKey: true, // now the primary key
     },
     email: {
       type: DataTypes.STRING,
@@ -35,14 +36,13 @@ const Doctor = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    licenseNumber: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    yearsOfExperience: {
+    yearOfStart: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        min: 1950,
+        max: new Date().getFullYear(),
+      },
     },
     hospitalId: {
       type: DataTypes.INTEGER,
@@ -62,7 +62,7 @@ const Doctor = sequelize.define(
         }
       },
       beforeUpdate: async (doctor) => {
-        if (doctor.changed('password')) {
+        if (doctor.changed("password")) {
           doctor.password = await bcrypt.hash(doctor.password, 10);
         }
       },
@@ -74,10 +74,10 @@ const Doctor = sequelize.define(
 Doctor.belongsTo(Hospital, { foreignKey: "hospitalId" });
 Hospital.hasMany(Doctor, { foreignKey: "hospitalId", onDelete: "CASCADE" });
 
-// Instance methods
+// Auth methods
 Doctor.prototype.generateAuthToken = function () {
-  return jwt.sign({ id: this.id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: '24h',
+  return jwt.sign({ licenseNumber: this.licenseNumber }, process.env.JWT_SECRET_KEY, {
+    expiresIn: "24h",
   });
 };
 

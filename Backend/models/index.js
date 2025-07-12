@@ -4,31 +4,48 @@ const Hospital = require('./hospital.model');
 const BlacklistToken = require('./blacklistToken.model');
 const { sequelize } = require('../config/database');
 
-// 🔁 Correct One-to-Many Relationship (Doctor → Hospital)
-Hospital.hasMany(Doctor, { foreignKey: "hospitalId", onDelete: "CASCADE" });
-Doctor.belongsTo(Hospital, { foreignKey: "hospitalId" });
 
+Hospital.hasMany(Doctor, {
+  foreignKey: 'hospitalId',
+  onDelete: 'CASCADE',
+});
+Doctor.belongsTo(Hospital, {
+  foreignKey: 'hospitalId',
+});
 
-// Optional: User Relationships (unchanged)
-User.belongsTo(Doctor, { as: "primaryDoctor" });
-Doctor.hasMany(User, { as: "patients" });
+User.belongsTo(Doctor, {
+  as: 'primaryDoctor',
+  foreignKey: 'primaryDoctorLicense',
+  targetKey: 'licenseNumber', 
+});
+Doctor.hasMany(User, {
+  as: 'patients',
+  foreignKey: 'primaryDoctorLicense',
+  sourceKey: 'licenseNumber',
+});
 
 User.belongsToMany(Hospital, {
   through: 'user_hospitals',
   as: 'preferredHospitals',
 });
 Hospital.belongsToMany(User, {
-  through: "user_hospitals",
-  as: "patients",
+  through: 'user_hospitals',
+  as: 'patients',
 });
 
-// ✅ Sync all models
+// ===============================
+// Sync Function (Only in Development)
+// ===============================
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true }); // or { force: true } for full reset
-    console.log("Database synced successfully");
+    if (process.env.NODE_ENV !== 'production') {
+      await sequelize.sync({ alter: true }); // Safe for development only
+      console.log('✅ Database synced successfully (development)');
+    } else {
+      console.log('⚠️ Skipping sequelize.sync() in production. Use migrations instead.');
+    }
   } catch (error) {
-    console.error('Error syncing database:', error);
+    console.error('❌ Error syncing database:', error);
   }
 };
 
