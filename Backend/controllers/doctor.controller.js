@@ -2,7 +2,6 @@ const { Doctor } = require("../models");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-// 🔐 Register Doctor
 exports.registerDoctor = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -25,10 +24,12 @@ exports.registerDoctor = async (req, res) => {
       return res.status(409).json({ message: "Email already in use" });
     }
 
+    const bcrypt = require("bcrypt");
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newDoctor = await Doctor.create({
       licenseNumber,
       email,
-      password,
+      password: hashedPassword,
       name,
       specialization,
       yearOfStart,
@@ -53,7 +54,6 @@ exports.registerDoctor = async (req, res) => {
   }
 };
 
-// 🔓 Login Doctor
 exports.loginDoctor = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -92,18 +92,6 @@ exports.loginDoctor = async (req, res) => {
   }
 };
 
-// 👨‍⚕️ Create new doctor (raw)
-exports.createDoctor = async (req, res) => {
-  try {
-    const doctor = await Doctor.create(req.body);
-    res.status(201).json(doctor);
-  } catch (error) {
-    console.error("Error creating doctor:", error);
-    res.status(500).json({ message: "Error creating doctor" });
-  }
-};
-
-// 📄 Get all doctors
 exports.getAllDoctors = async (req, res) => {
   try {
     const doctors = await Doctor.findAll();
@@ -114,7 +102,6 @@ exports.getAllDoctors = async (req, res) => {
   }
 };
 
-// 🔍 Get doctor by license number
 exports.getDoctorByLicenseNumber = async (req, res) => {
   try {
     const doctor = await Doctor.findByPk(req.params.licenseNumber);
@@ -128,7 +115,6 @@ exports.getDoctorByLicenseNumber = async (req, res) => {
   }
 };
 
-// ✏️ Update doctor
 exports.updateDoctor = async (req, res) => {
   try {
     const doctor = await Doctor.findByPk(req.params.licenseNumber);
@@ -143,7 +129,6 @@ exports.updateDoctor = async (req, res) => {
   }
 };
 
-// 🗑️ Delete doctor
 exports.deleteDoctor = async (req, res) => {
   try {
     const doctor = await Doctor.findByPk(req.params.licenseNumber);

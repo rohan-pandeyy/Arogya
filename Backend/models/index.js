@@ -4,15 +4,19 @@ const Hospital = require('./hospital.model');
 const BlacklistToken = require('./blacklistToken.model');
 const { sequelize } = require('../config/database');
 
-// ✅ Doctor ↔ Hospital (One-to-Many)
-Hospital.hasMany(Doctor, { foreignKey: 'hospitalId', onDelete: 'CASCADE' });
-Doctor.belongsTo(Hospital, { foreignKey: 'hospitalId' });
 
-// ✅ User ↔ Doctor using licenseNumber (One-to-Many, custom FK)
+Hospital.hasMany(Doctor, {
+  foreignKey: 'hospitalId',
+  onDelete: 'CASCADE',
+});
+Doctor.belongsTo(Hospital, {
+  foreignKey: 'hospitalId',
+});
+
 User.belongsTo(Doctor, {
   as: 'primaryDoctor',
   foreignKey: 'primaryDoctorLicense',
-  targetKey: 'licenseNumber', // ⬅️ use Doctor.licenseNumber instead of id
+  targetKey: 'licenseNumber', 
 });
 Doctor.hasMany(User, {
   as: 'patients',
@@ -20,7 +24,6 @@ Doctor.hasMany(User, {
   sourceKey: 'licenseNumber',
 });
 
-// ✅ User ↔ Hospital (Many-to-Many)
 User.belongsToMany(Hospital, {
   through: 'user_hospitals',
   as: 'preferredHospitals',
@@ -30,13 +33,19 @@ Hospital.belongsToMany(User, {
   as: 'patients',
 });
 
-// ✅ Sync all models
+// ===============================
+// Sync Function (Only in Development)
+// ===============================
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true }); // Use force: true if structure is stuck
-    console.log('Database synced successfully');
+    if (process.env.NODE_ENV !== 'production') {
+      await sequelize.sync({ alter: true }); // Safe for development only
+      console.log('✅ Database synced successfully (development)');
+    } else {
+      console.log('⚠️ Skipping sequelize.sync() in production. Use migrations instead.');
+    }
   } catch (error) {
-    console.error('Error syncing database:', error);
+    console.error('❌ Error syncing database:', error);
   }
 };
 

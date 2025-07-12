@@ -43,8 +43,6 @@ router.post(
   doctorController.loginDoctor
 );
 
-// CRUD routes
-router.post("/", doctorController.createDoctor); // optional, already covered by register
 router.get("/", doctorController.getAllDoctors);
 router.get("/:licenseNumber", doctorController.getDoctorByLicenseNumber);
 router.put("/:licenseNumber", authUser, doctorController.updateDoctor);
