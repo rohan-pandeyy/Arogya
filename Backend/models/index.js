@@ -1,7 +1,7 @@
 const { sequelize } = require('../config/database');
-const User = require('./User');
-const Doctor = require('./Doctor');
-const BlacklistToken = require('./BlacklistToken');
+const User = require('./User.model');
+const Doctor = require('./Doctor.model');
+const BlacklistToken = require('./BlacklistToken.model');
 
 // Setup associations if any
 User.belongsTo(Doctor, { foreignKey: 'primaryDoctorLicense', targetKey: 'licenseNumber' });
