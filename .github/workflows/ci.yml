@@ -1,4 +1,4 @@
-name: CI - Arogya Monorepo
+name: CI Checks
 
 on:
   push:

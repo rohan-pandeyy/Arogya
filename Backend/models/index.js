@@ -4,7 +4,6 @@ const Hospital = require('./hospital.model');
 const BlacklistToken = require('./blacklistToken.model');
 const { sequelize } = require('../config/database');
 
-
 Hospital.hasMany(Doctor, {
   foreignKey: 'hospitalId',
   onDelete: 'CASCADE',
@@ -16,7 +15,7 @@ Doctor.belongsTo(Hospital, {
 User.belongsTo(Doctor, {
   as: 'primaryDoctor',
   foreignKey: 'primaryDoctorLicense',
-  targetKey: 'licenseNumber', 
+  targetKey: 'licenseNumber',
 });
 Doctor.hasMany(User, {
   as: 'patients',
@@ -38,11 +37,13 @@ Hospital.belongsToMany(User, {
 // ===============================
 const syncDatabase = async () => {
   try {
-    if (process.env.NODE_ENV !== 'production') {
-      await sequelize.sync({ alter: true }); // Safe for development only
-      console.log('✅ Database synced successfully (development)');
+    if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+      await sequelize.sync({ alter: true });
+      console.log('✅ DB synced (dev)');
     } else {
-      console.log('⚠️ Skipping sequelize.sync() in production. Use migrations instead.');
+      console.log(
+        '⚠️ Skipping sequelize.sync() in production. Use migrations instead.',
+      );
     }
   } catch (error) {
     console.error('❌ Error syncing database:', error);
