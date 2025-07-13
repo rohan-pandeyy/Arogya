@@ -13,7 +13,8 @@ const doctorRoutes = require('./routes/doctor.routes');
 testConnection();
 
 // Sync database models
-sequelize.sync().then(() => {
+const syncOptions = process.env.NODE_ENV === 'test' ? { force: true } : {};
+sequelize.sync(syncOptions).then(() => {
   console.log('All models were synchronized successfully.');
 });
 
