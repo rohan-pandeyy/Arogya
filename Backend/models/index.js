@@ -1,59 +1,15 @@
-const User = require('./user.model');
-const Doctor = require('./doctor.model');
-const Hospital = require('./hospital.model');
-const BlacklistToken = require('./blacklistToken.model');
 const { sequelize } = require('../config/database');
+const User = require('./User');
+const Doctor = require('./Doctor');
+const BlacklistToken = require('./BlacklistToken');
 
-Hospital.hasMany(Doctor, {
-  foreignKey: 'hospitalId',
-  onDelete: 'CASCADE',
-});
-Doctor.belongsTo(Hospital, {
-  foreignKey: 'hospitalId',
-});
-
-User.belongsTo(Doctor, {
-  as: 'primaryDoctor',
-  foreignKey: 'primaryDoctorLicense',
-  targetKey: 'licenseNumber',
-});
-Doctor.hasMany(User, {
-  as: 'patients',
-  foreignKey: 'primaryDoctorLicense',
-  sourceKey: 'licenseNumber',
-});
-
-User.belongsToMany(Hospital, {
-  through: 'user_hospitals',
-  as: 'preferredHospitals',
-});
-Hospital.belongsToMany(User, {
-  through: 'user_hospitals',
-  as: 'patients',
-});
-
-// ===============================
-// Sync Function (Only in Development)
-// ===============================
-const syncDatabase = async () => {
-  try {
-    if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-      await sequelize.sync({ alter: true });
-      console.log('✅ DB synced (dev)');
-    } else {
-      console.log(
-        '⚠️ Skipping sequelize.sync() in production. Use migrations instead.',
-      );
-    }
-  } catch (error) {
-    console.error('❌ Error syncing database:', error);
-  }
-};
+// Setup associations if any
+User.belongsTo(Doctor, { foreignKey: 'primaryDoctorLicense', targetKey: 'licenseNumber' });
+Doctor.hasMany(User, { foreignKey: 'primaryDoctorLicense', sourceKey: 'licenseNumber' });
 
 module.exports = {
+  sequelize,
   User,
   Doctor,
-  Hospital,
   BlacklistToken,
-  syncDatabase,
 };

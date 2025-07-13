@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
-const { User, BlacklistToken } = require('../models');
-const { sequelize } = require('../config/database'); // FIX: import sequelize from config
+const { User, BlacklistToken, sequelize } = require('../models'); // Import sequelize from models
 
 describe('User Auth Flow', () => {
   const testUser = {
