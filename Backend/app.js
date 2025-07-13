@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const cookieParser = require('cookie-parser');
 const { testConnection } = require('./config/database');
-const { syncDatabase } = require('./models');
+const { sequelize } = require('./models');
 const userRoutes = require('./routes/user.routes');
 const hospitalRoutes = require('./routes/hospital.routes');
 const doctorRoutes = require('./routes/doctor.routes');
@@ -13,7 +13,9 @@ const doctorRoutes = require('./routes/doctor.routes');
 testConnection();
 
 // Sync database models
-syncDatabase();
+sequelize.sync().then(() => {
+  console.log('All models were synchronized successfully.');
+});
 
 // Middleware
 app.use(
