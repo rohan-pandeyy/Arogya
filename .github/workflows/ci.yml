@@ -1,4 +1,4 @@
-name: CI Checks
+name: CI - Arogya Monorepo
 
 on:
   push:
@@ -23,5 +23,66 @@ jobs:
         with:
           node-version: 22.17.0
 
-      - name: Install root dependencies (for ESLint & Prettier)
+      - name: Install root ESLint + Prettier (if any)
+        run: npm install || true
+
+      - name: Install frontend dependencies
         run: npm install
+        working-directory: ./Arogya
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: ./Backend
+
+      - name: Run ESLint
+        run: npx eslint --config eslint.config.mjs . --ext .ts,.tsx,.js
+
+      - name: Run Prettier check - frontend
+        run: npx prettier --check "Arogya/**/*.{ts,tsx,js,json,css,md}"
+
+      - name: Run Prettier check - backend
+        run: npx prettier --check "Backend/**/*.{js,json,md}"
+
+  backend-tests:
+    name: Backend API Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: arogya_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: ./Backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set up test environment
+        run: |
+          echo "NODE_ENV=test" > .env
+          echo "DATABASE_URL=postgres://testuser:testpass@localhost:5432/arogya_test" >> .env
+          echo "JWT_SECRET=testsecret" >> .env
+
+      - name: Run backend tests
+        run: npm test
