@@ -121,6 +121,9 @@
 │   ├── assets/
 │   │   └── AROGYA_banner.svg
 │   └── backend/
+│       ├── backend_db/
+│       │   ├── db_schema.md
+│       │   └── db_schema_description.md
 │       └── backend_javascript/
 │           └── api.md
 ├── README.md
@@ -129,4 +132,4 @@
 ├── package-lock.json
 └── package.json
 
-34 directories, 96 files
+35 directories, 98 files
