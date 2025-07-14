@@ -23,6 +23,8 @@
 │   │   │   └── page.tsx
 │   │   ├── blog/
 │   │   │   └── page.tsx
+│   │   ├── book-an-appointment/
+│   │   │   └── page.tsx
 │   │   ├── dashboard/
 │   │   │   ├── layout.tsx
 │   │   │   └── page.tsx
@@ -60,6 +62,8 @@
 │   │   │   └── MissionSection.tsx
 │   │   ├── BlogPage/
 │   │   │   └── HeroSection.tsx
+│   │   ├── BookAppointmentPage/
+│   │   │   └── HeroSection.tsx
 │   │   └── CallAmbulancePage/
 │   │       └── HeroSection.tsx
 │   ├── postcss.config.js
@@ -68,6 +72,10 @@
 │   │   ├── arogya_white.svg
 │   │   ├── arogya_whiteWborder.svg
 │   │   ├── assets/
+│   │   │   ├── BookAppointmentPage/
+│   │   │   │   ├── AppointmentBookingBG.jpg
+│   │   │   │   ├── DownloadOnAppStoreBadge.png
+│   │   │   │   └── DownloadOnGooglePlayBadge.png
 │   │   │   ├── layered-waves.svg
 │   │   │   └── mission&vision.avif
 │   │   ├── favicon.ico
@@ -132,4 +140,4 @@
 ├── package-lock.json
 └── package.json
 
-35 directories, 98 files
+38 directories, 103 files
