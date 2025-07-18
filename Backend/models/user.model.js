@@ -7,9 +7,9 @@ const User = sequelize.define(
   'User',
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -32,36 +32,16 @@ const User = sequelize.define(
     },
     age: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     gender: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        isIn: [['male', 'female', 'other']],
+        isIn: [['male', 'female', 'other', null]],
       },
     },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     phone: {
-      type: DataTypes.BIGINT,
-      allowNull: true,
-    },
-    dob: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-    },
-    bloodGroup: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    diagnosis: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    allergies: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -85,7 +65,7 @@ const User = sequelize.define(
 
 // Instance methods
 User.prototype.generateAuthToken = function () {
-  return jwt.sign({ id: this.id }, process.env.JWT_SECRET_KEY, {
+  return jwt.sign({ id: this.id, email: this.email }, process.env.JWT_SECRET_KEY, {
     expiresIn: '24h',
   });
 };

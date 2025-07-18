@@ -1,36 +1,47 @@
 const User = require('./user.model');
+const Role = require('./role.model');
+const Patient = require('./patient.model');
 const Doctor = require('./doctor.model');
-const Hospital = require('./hospital.model');
+const Staff = require('./staff.model');
+const Facility = require('./facility.model');
 const BlacklistToken = require('./blacklistToken.model');
 const { sequelize } = require('../config/database');
 
+// User -> Role (Many-to-Many)
+const UserRole = sequelize.define('UserRole', {}, { timestamps: false });
+User.belongsToMany(Role, { through: UserRole });
+Role.belongsToMany(User, { through: UserRole });
 
-Hospital.hasMany(Doctor, {
-  foreignKey: 'hospitalId',
-  onDelete: 'CASCADE',
+// User -> Patient (One-to-One)
+User.hasOne(Patient, { foreignKey: 'id', onDelete: 'CASCADE' });
+Patient.belongsTo(User, { foreignKey: 'id' });
+
+// User -> Doctor (One-to-One)
+User.hasOne(Doctor, { foreignKey: 'id', onDelete: 'CASCADE' });
+Doctor.belongsTo(User, { foreignKey: 'id' });
+
+// User -> Staff (One-to-One)
+User.hasOne(Staff, { foreignKey: 'id', onDelete: 'CASCADE' });
+Staff.belongsTo(User, { foreignKey: 'id' });
+
+// Facility -> Doctor (One-to-Many)
+Facility.hasMany(Doctor, {
+  foreignKey: 'facilityId',
+  as: 'doctors',
 });
-Doctor.belongsTo(Hospital, {
-  foreignKey: 'hospitalId',
+Doctor.belongsTo(Facility, {
+  foreignKey: 'facilityId',
+  as: 'facility',
 });
 
-User.belongsTo(Doctor, {
-  as: 'primaryDoctor',
-  foreignKey: 'primaryDoctorLicense',
-  targetKey: 'licenseNumber', 
+// Facility -> Staff (One-to-Many)
+Facility.hasMany(Staff, {
+  foreignKey: 'facilityId',
+  as: 'staffMembers',
 });
-Doctor.hasMany(User, {
-  as: 'patients',
-  foreignKey: 'primaryDoctorLicense',
-  sourceKey: 'licenseNumber',
-});
-
-User.belongsToMany(Hospital, {
-  through: 'user_hospitals',
-  as: 'preferredHospitals',
-});
-Hospital.belongsToMany(User, {
-  through: 'user_hospitals',
-  as: 'patients',
+Staff.belongsTo(Facility, {
+  foreignKey: 'facilityId',
+  as: 'facility',
 });
 
 // ===============================
@@ -39,7 +50,12 @@ Hospital.belongsToMany(User, {
 const syncDatabase = async () => {
   try {
     if (process.env.NODE_ENV !== 'production') {
-      await sequelize.sync({ alter: true }); // Safe for development only
+      await sequelize.sync({ alter: true });
+      // Seed roles if they don't exist
+      await Role.findOrCreate({ where: { name: 'patient' } });
+      await Role.findOrCreate({ where: { name: 'doctor' } });
+      await Role.findOrCreate({ where: { name: 'staff' } });
+      await Role.findOrCreate({ where: { name: 'admin' } });
       console.log('✅ Database synced successfully (development)');
     } else {
       console.log('⚠️ Skipping sequelize.sync() in production. Use migrations instead.');
@@ -51,8 +67,13 @@ const syncDatabase = async () => {
 
 module.exports = {
   User,
+  Role,
+  UserRole,
+  Patient,
   Doctor,
-  Hospital,
+  Staff,
+  Facility,
   BlacklistToken,
   syncDatabase,
+  sequelize,
 };

@@ -1,46 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
 const userController = require('../controllers/user.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
-const { authUser } = require('../middlewares/auth.middleware');
-const { getCurrentUser } = require('../controllers/user.controller');
+const { verifyToken } = require('../middlewares/auth.middleware');
 
-router.get('/me', authUser, getCurrentUser);
+/**
+ * @route   GET /api/users/me
+ * @desc    Get current user's complete profile (base + role-specific info)
+ * @access  Private
+ */
+router.get('/me', verifyToken, userController.getCurrentUser);
 
-router.post(
-  '/register',
-  [
-    body('email').isEmail().withMessage('Invalid email'),
-    body('password')
-      .isLength({ min: 8 })
-      .withMessage('Password must be at least 8 characters long'),
-    body('name')
-      .isLength({ min: 3 })
-      .withMessage('Name must be at least 3 characters long'),
-  ],
-  userController.registerUser,
-);
+/**
+ * @route   PATCH /api/users/me
+ * @desc    Update the current user's base profile (name, age, etc.)
+ * @access  Private
+ */
+router.patch('/me', verifyToken, userController.updateCurrentUser);
 
-router.post(
-  '/login',
-  [
-    body('email').isEmail().withMessage('Invalid email'),
-    body('password')
-      .isLength({ min: 8 })
-      .withMessage('Password must be at least 8 characters long'),
-  ],
-  userController.loginUser,
-);
-
-router.get('/profile', authMiddleware.authUser, userController.getUserProfile);
-
-router.post('/logout', authMiddleware.authUser, userController.logoutUser);
-
-router.put(
-  '/profile',
-  authMiddleware.authUser,
-  userController.updateUserProfile,
-);
+/**
+ * @route   POST /api/users/become-patient
+ * @desc    Adds the 'patient' role and profile to the currently logged-in user
+ * @access  Private
+ */
+router.post('/become-patient', verifyToken, userController.becomePatient);
 
 module.exports = router;
