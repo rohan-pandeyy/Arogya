@@ -101,23 +101,26 @@
 │   ├── config/
 │   │   └── database.js
 │   ├── controllers/
-│   │   ├── doctor.controller.js
-│   │   ├── hospital.controller.js
+│   │   ├── auth.controller.js
+│   │   ├── facility.controller.js
 │   │   └── user.controller.js
 │   ├── middlewares/
 │   │   └── auth.middleware.js
 │   ├── models/
 │   │   ├── blacklistToken.model.js
 │   │   ├── doctor.model.js
-│   │   ├── hospital.model.js
+│   │   ├── facility.model.js
 │   │   ├── index.js
+│   │   ├── patient.model.js
+│   │   ├── role.model.js
 │   │   ├── sql_schema.sql
+│   │   ├── staff.model.js
 │   │   └── user.model.js
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── routes/
-│   │   ├── doctor.routes.js
-│   │   ├── hospital.routes.js
+│   │   ├── auth.routes.js
+│   │   ├── facility.routes.js
 │   │   └── user.routes.js
 │   ├── server.js
 │   └── services/
@@ -140,4 +143,4 @@
 ├── package-lock.json
 └── package.json
 
-38 directories, 103 files
+38 directories, 106 files
