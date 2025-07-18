@@ -3,8 +3,8 @@ const { sequelize } = require('../config/database');
 const User = require('./user.model');
 const Facility = require('./facility.model');
 
-const Doctor = sequelize.define(
-  'Doctor',
+const Staff = sequelize.define(
+  'Staff',
   {
     id: {
       type: DataTypes.UUID,
@@ -12,22 +12,6 @@ const Doctor = sequelize.define(
       references: {
         model: User,
         key: 'id',
-      },
-    },
-    licenseNumber: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    specialization: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    yearsOfExperience: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: 0,
       },
     },
     facilityId: {
@@ -38,8 +22,10 @@ const Doctor = sequelize.define(
         key: 'id',
       },
     },
+    // e.g., 'receptionist', 'facility-admin'
+    role: { type: DataTypes.STRING, allowNull: false },
   },
   { timestamps: true },
 );
 
-module.exports = Doctor;
+module.exports = Staff;

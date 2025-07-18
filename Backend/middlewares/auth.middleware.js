@@ -1,42 +1,52 @@
-const { User, BlacklistToken } = require('../models');
 const jwt = require('jsonwebtoken');
+const { User, Role } = require('../models');
 
-module.exports.authUser = async (req, res, next) => {
+/**
+ * Verifies the JWT from the Authorization header.
+ * Attaches the full user object with roles to req.user.
+ */
+const verifyToken = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Access Denied. No token provided.' });
+  }
+
+  const token = authHeader.split(' ')[1];
   try {
-    // Get token from header or cookie
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-      return res.status(401).json({ message: 'Missing token' });
-    }
-
-    // Check if token is blacklisted
-    const blacklistedToken = await BlacklistToken.findOne({ where: { token } });
-    if (blacklistedToken) {
-      return res.status(401).json({ message: 'Token has been invalidated' });
-    }
-
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    // Find user by id
-    const user = await User.findByPk(decoded.id);
+    // Fetch user with their roles
+    const user = await User.findByPk(decoded.id, {
+      include: {
+        model: Role,
+        attributes: ['name'],
+        through: { attributes: [] }, // Don't include the join table attributes
+      },
+    });
 
     if (!user) {
-      return res.status(401).json({ message: 'User not found' });
+      return res.status(401).json({ message: 'Invalid token. User not found.' });
     }
 
-    // Attach user to request object
-    req.user = user;
-    return next();
+    req.user = user; // Attach user instance to the request
+    next();
   } catch (error) {
-    console.error('Auth error:', error);
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Token expired' });
-    }
-    return res.status(401).json({ message: 'Authentication failed' });
+    return res.status(401).json({ message: 'Invalid Token' });
   }
 };
+
+/**
+ * Middleware factory to check if the user has one of the required roles.
+ * @param {string[]} requiredRoles - Array of role names (e.g., ['admin', 'staff'])
+ */
+const checkRoles = (requiredRoles) => (req, res, next) => {
+  const userRoles = req.user.Roles.map((role) => role.name);
+  const hasRole = requiredRoles.some((role) => userRoles.includes(role));
+
+  if (!hasRole) {
+    return res.status(403).json({ message: 'Forbidden: You do not have the required permissions.' });
+  }
+  next();
+};
+
+module.exports = { verifyToken, checkRoles };

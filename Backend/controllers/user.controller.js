@@ -1,171 +1,113 @@
-const { User } = require('../models');
-const { validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-const BlacklistToken = require('../models/blacklistToken.model');
+const { User, Patient, Doctor, Staff, Role, Facility, sequelize } = require('../models');
 
-module.exports.getCurrentUser = async (req, res) => {
+const getCurrentUser = async (req, res) => {
   try {
-    const userData = req.user.toJSON();
-    delete userData.password;
-    res.status(200).json({ user: userData });
-  } catch (error) {
-    console.error('Get current user error:', error);
-    res.status(500).json({ message: 'Error fetching user info' });
-  }
-};
+    const userId = req.user.id;
+    const userRoles = req.user.Roles.map((role) => role.name);
 
-module.exports.registerUser = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    const { email, password, name, age, gender } = req.body;
-
-    // Check if user already exists
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+    // Dynamically build the list of profiles to include based on the user's roles
+    const includeProfiles = [];
+    if (userRoles.includes('patient')) {
+      includeProfiles.push({ model: Patient });
+    }
+    if (userRoles.includes('doctor')) {
+      // For doctors, also include the facility they work at
+      includeProfiles.push({
+        model: Doctor,
+        include: [{ model: Facility, as: 'facility' }],
+      });
+    }
+    if (userRoles.includes('staff')) {
+      // For staff, also include their facility
+      includeProfiles.push({
+        model: Staff,
+        include: [{ model: Facility, as: 'facility' }],
+      });
     }
 
-    // Create new user
-    const user = await User.create({
-      email,
-      password, // Password will be hashed by the model hook
-      name,
-      age,
-      gender,
-    });
-
-    // Generate token
-    const token = user.generateAuthToken();
-
-    // Return user data (excluding password)
-    const userData = user.toJSON();
-    delete userData.password;
-
-    res.status(201).json({ token, user: userData });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Error registering user' });
-  }
-};
-
-module.exports.loginUser = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    const { email, password } = req.body;
-
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    // Compare password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    // Generate token
-    const token = user.generateAuthToken();
-
-    // Set cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
-
-    // Return user data (excluding password)
-    const userData = user.toJSON();
-    delete userData.password;
-
-    res.status(200).json({ token, user: userData });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Error logging in' });
-  }
-};
-
-module.exports.getUserProfile = async (req, res, next) => {
-  try {
-    const user = await User.findByPk(req.user.id, {
-      attributes: { exclude: ['password'] },
+    // Fetch the complete user profile with all associated role data
+    const fullUserProfile = await User.findByPk(userId, {
+      attributes: { exclude: ['password'] }, // Never send the password hash
       include: [
         {
-          association: 'primaryDoctor',
-          attributes: ['id', 'name', 'specialization'],
+          model: Role,
+          attributes: ['name'],
+          through: { attributes: [] }, // Don't include the join table
         },
-        {
-          association: 'preferredHospitals',
-          attributes: ['id', 'name', 'addressCity'],
-        },
+        ...includeProfiles,
       ],
     });
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.status(200).json(user);
+    res.status(200).json(fullUserProfile);
   } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ message: 'Error fetching user profile' });
+    console.error('Error fetching current user profile:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-module.exports.logoutUser = async (req, res, next) => {
+const updateCurrentUser = async (req, res) => {
   try {
-    res.clearCookie('token');
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    // Whitelist fields that can be updated on the base User model
+    const { name, age, gender, phone } = req.body;
+    const allowedUpdates = { name, age, gender, phone };
 
-    if (token) {
-      await BlacklistToken.create({ token });
+    // Remove any undefined fields so we don't nullify existing data
+    Object.keys(allowedUpdates).forEach(
+      (key) => allowedUpdates[key] === undefined && delete allowedUpdates[key],
+    );
+
+    if (Object.keys(allowedUpdates).length === 0) {
+      return res.status(400).json({ message: 'No valid fields provided for update.' });
     }
 
-    res.status(200).json({ message: 'Logged out successfully' });
+    const [updateCount] = await User.update(allowedUpdates, {
+      where: { id: req.user.id },
+    });
+
+    if (updateCount === 0) {
+      return res.status(404).json({ message: 'User not found or no new data to update.' });
+    }
+
+    res.status(200).json({ message: 'Profile updated successfully.' });
   } catch (error) {
-    console.error('Logout error:', error);
-    res.status(500).json({ message: 'Error logging out' });
+    console.error('Error updating user profile:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-module.exports.updateUserProfile = async (req, res) => {
+const becomePatient = async (req, res) => {
+  const t = await sequelize.transaction();
   try {
-    const userId = req.user.id;
+    const user = req.user;
+    const userRoles = user.Roles.map((role) => role.name);
 
-    const { dob, address, phone, bloodGroup, diagnosis, allergies, age } =
-      req.body;
-
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    if (userRoles.includes('patient')) {
+      await t.rollback();
+      return res.status(409).json({ message: 'User is already registered as a patient.' });
     }
 
-    user.dob = dob;
-    user.address = address;
-    user.phone = phone;
-    user.bloodGroup = bloodGroup;
-    user.diagnosis = diagnosis;
-    user.allergies = allergies;
-    if (age) user.age = age;
+    // Find the 'patient' role
+    const patientRole = await Role.findOne({ where: { name: 'patient' }, transaction: t });
+    if (!patientRole) {
+      await t.rollback();
+      return res.status(500).json({ message: 'Patient role not found in system.' });
+    }
 
-    await user.save();
+    // Associate user with the role and create the patient profile
+    await user.addRole(patientRole, { transaction: t });
+    await Patient.create({ id: user.id, ...req.body }, { transaction: t });
 
-    const updatedData = user.toJSON();
-    delete updatedData.password;
-
-    res.status(200).json({ message: 'Profile updated', user: updatedData });
+    await t.commit();
+    res.status(201).json({ message: 'Successfully registered as a patient.' });
   } catch (error) {
-    console.error('Update profile error:', error);
-    res.status(500).json({ message: 'Error updating profile' });
+    await t.rollback();
+    console.error('Error in becomePatient:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
+};
+
+module.exports = {
+  getCurrentUser,
+  updateCurrentUser,
+  becomePatient,
 };
