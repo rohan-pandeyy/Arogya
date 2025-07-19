@@ -7,7 +7,7 @@ const register = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { email, password, name, roles, patientProfile, doctorProfile, staffProfile } = req.body;
+  const { email, password, name, age, phone, gender, roles, patientProfile, doctorProfile, staffProfile } = req.body;
 
   // Use a transaction to ensure all or nothing is written to the DB
   const t = await sequelize.transaction();
@@ -21,7 +21,7 @@ const register = async (req, res) => {
     }
 
     // 2. Create the base user
-    const newUser = await User.create({ email, password, name }, { transaction: t });
+    const newUser = await User.create({ email, password, name, age, phone, gender }, { transaction: t });
 
     // 3. Find the role models from the database
     const roleInstances = await Role.findAll({ where: { name: roles }, transaction: t });

@@ -16,6 +16,9 @@ router.post(
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
     body('name').notEmpty().withMessage('Name is required'),
     body('roles').isArray({ min: 1 }).withMessage('At least one role is required'),
+    body('age').notEmpty().isInt({ min: 0 }).withMessage('A valid age is required'),
+    body('phone').notEmpty().isInt({ min: 0 }).withMessage('A valid phone number is required'),
+    body('gender').notEmpty().withMessage('Gender is required')
   ],
   authController.register,
 );
