@@ -41,8 +41,7 @@
 │   │       ├── colourful-text.tsx
 │   │       ├── morph-background.tsx
 │   │       ├── sidebar.tsx
-│   │       ├── userdropdown.tsx
-│   │       └── vortex.tsx
+│   │       └── userdropdown.tsx
 │   ├── config/
 │   │   ├── fonts.ts
 │   │   └── site.ts
@@ -71,7 +70,11 @@
 │   │   ├── arogya_black.svg
 │   │   ├── arogya_white.svg
 │   │   ├── arogya_whiteWborder.svg
+│   │   ├── arogya_wordmark.svg
 │   │   ├── assets/
+│   │   │   ├── AboutUsPage/
+│   │   │   │   ├── HeroSection.png
+│   │   │   │   └── HeroSection.svg
 │   │   │   ├── BookAppointmentPage/
 │   │   │   │   ├── AppointmentBookingBG.jpg
 │   │   │   │   ├── DownloadOnAppStoreBadge.png
@@ -143,4 +146,4 @@
 ├── package-lock.json
 └── package.json
 
-38 directories, 106 files
+39 directories, 108 files
