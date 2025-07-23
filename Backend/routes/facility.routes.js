@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const facilityController = require('../controllers/facility.controller'); // We will create this
-const { verifyToken, checkRoles } = require('../middlewares/auth.middleware');
+const { protect, checkRoles } = require('../middlewares/auth.middleware');
 
-const adminOnly = [verifyToken, checkRoles(['admin'])];
+const adminOnly = [protect, checkRoles(["admin"])];
 
 /**
  * @route   POST /api/facilities

@@ -8,6 +8,7 @@ const { syncDatabase } = require('./models');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const facilityRoutes = require('./routes/facility.routes');
+const physioRoutes = require('./routes/physio.routes');
 
 // --- Initialize Express App ---
 const app = express();
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/facilities', facilityRoutes);
+app.use('/api/physio', physioRoutes);
 
 // --- Start Server ---
 const PORT = process.env.PORT || 80;

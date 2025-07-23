@@ -2,51 +2,84 @@ const jwt = require('jsonwebtoken');
 const { User, Role } = require('../models');
 
 /**
- * Verifies the JWT from the Authorization header.
- * Attaches the full user object with roles to req.user.
+ * @desc    Protect routes by verifying JWT token.
+ * Attaches the user with their roles to the request object.
  */
-const verifyToken = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Access Denied. No token provided.' });
+const protect = async (req, res, next) => {
+  let token;
+
+  // Check for token in the authorization header
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      // Extract token from 'Bearer TOKEN'
+      token = req.headers.authorization.split(' ')[1];
+
+      // Verify the token using the secret key
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+      // Find the user by the ID from the token payload
+      // Eager load the associated Roles to get user's roles
+      req.user = await User.findByPk(decoded.id, {
+        include: [
+          {
+            model: Role,
+            as: 'Roles', // This alias must match User-Role model association
+            attributes: ['name'],
+            through: { attributes: [] }, // Exclude junction table attributes
+          },
+        ],
+      });
+
+      // If user not found (e.g., deleted after token was issued), send an unauthorized error
+      if (!req.user) {
+        return res.status(401).json({ message: 'Not authorized, user not found' });
+      }
+
+      next(); // Proceed to the next middleware
+    } catch (error) {
+      console.error('Token verification failed:', error);
+      return res.status(401).json({ message: 'Not authorized, token failed' });
+    }
   }
 
-  const token = authHeader.split(' ')[1];
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-    // Fetch user with their roles
-    const user = await User.findByPk(decoded.id, {
-      include: {
-        model: Role,
-        attributes: ['name'],
-        through: { attributes: [] }, // Don't include the join table attributes
-      },
-    });
-
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid token. User not found.' });
-    }
-
-    req.user = user; // Attach user instance to the request
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: 'Invalid Token' });
+  // If no token is present at all, send an unauthorized error
+  if (!token) {
+    return res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 
 /**
- * Middleware factory to check if the user has one of the required roles.
- * @param {string[]} requiredRoles - Array of role names (e.g., ['admin', 'staff'])
+ * @desc    Authorize user based on roles. This is a higher-order function.
+ * @param   {...string} allowedRoles - A list of role names that are allowed to access the route.
+ * @returns {function} Express middleware function.
  */
-const checkRoles = (requiredRoles) => (req, res, next) => {
-  const userRoles = req.user.Roles.map((role) => role.name);
-  const hasRole = requiredRoles.some((role) => userRoles.includes(role));
+const checkRoles = (...allowedRoles) => {
+  // This returned function is the actual middleware that Express will run
+  return (req, res, next) => {
+    // The 'protect' middleware should have already run and attached the user and their roles
+    if (!req.user || !req.user.Roles) {
+      return res.status(403).json({ message: 'Forbidden: User roles not available.' });
+    }
 
-  if (!hasRole) {
-    return res.status(403).json({ message: 'Forbidden: You do not have the required permissions.' });
-  }
-  next();
+    // Get an array of the user's role names (e.g., ['patient', 'admin'])
+    const userRoles = req.user.Roles.map((role) => role.name);
+
+    // Check if the user's roles array has at least one role that is in the allowedRoles array.
+    const hasPermission = userRoles.some((role) => allowedRoles.includes(role));
+
+    if (hasPermission) {
+      // If the user has a permitted role, proceed to the next middleware or the route handler
+      next();
+    } else {
+      // If not, send a 403 Forbidden error
+      res.status(403).json({
+        message: `Forbidden: Access requires one of the following roles: ${allowedRoles.join(', ')}.`,
+      });
+    }
+  };
 };
 
-module.exports = { verifyToken, checkRoles };
+module.exports = { protect, checkRoles };

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
-const authController = require('../controllers/auth.controller'); // We will create this controller
-const { verifyToken } = require('../middlewares/auth.middleware');
+const authController = require('../controllers/auth.controller');
+const { protect } = require('../middlewares/auth.middleware'); 
 
 /**
  * @route   POST /api/auth/register
@@ -13,12 +13,22 @@ router.post(
   '/register',
   [
     body('email').isEmail().withMessage('A valid email is required'),
-    body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters'),
+    body('password')
+      .isLength({ min: 8 })
+      .withMessage('Password must be at least 8 characters'),
     body('name').notEmpty().withMessage('Name is required'),
-    body('roles').isArray({ min: 1 }).withMessage('At least one role is required'),
-    body('age').notEmpty().isInt({ min: 0 }).withMessage('A valid age is required'),
-    body('phone').notEmpty().isInt({ min: 0 }).withMessage('A valid phone number is required'),
-    body('gender').notEmpty().withMessage('Gender is required')
+    body('roles')
+      .isArray({ min: 1 })
+      .withMessage('At least one role is required'),
+    body('age') // This field is optional
+      .optional()
+      .isInt({ min: 0 })
+      .withMessage('Age, if provided, must be a valid non-negative number'),
+    body('phone') // This field is optional
+      .optional()
+      .isString()
+      .withMessage('Phone, if provided, must be a valid phone number'),
+    body('gender').optional().isIn(['male', 'female', 'other']).withMessage('Gender, if provided, must be one of: male, female, other'),
   ],
   authController.register,
 );
@@ -30,7 +40,10 @@ router.post(
  */
 router.post(
   '/login',
-  [body('email').isEmail(), body('password').exists()],
+  [
+    body('email').isEmail().withMessage('A valid email is required'),
+    body('password').exists().withMessage('Password is required'),
+  ],
   authController.login,
 );
 
@@ -39,6 +52,6 @@ router.post(
  * @desc    Logout user (add token to blacklist)
  * @access  Private
  */
-router.post('/logout', verifyToken, authController.logout);
+router.post('/logout', protect, authController.logout);
 
 module.exports = router;

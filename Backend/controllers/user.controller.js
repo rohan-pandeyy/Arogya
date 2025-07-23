@@ -1,4 +1,12 @@
-const { User, Patient, Doctor, Staff, Role, Facility, sequelize } = require('../models');
+const {
+  User,
+  Patient,
+  Doctor,
+  Staff,
+  Role,
+  Facility,
+  sequelize,
+} = require('../models');
 
 const getCurrentUser = async (req, res) => {
   try {
@@ -57,7 +65,9 @@ const updateCurrentUser = async (req, res) => {
     );
 
     if (Object.keys(allowedUpdates).length === 0) {
-      return res.status(400).json({ message: 'No valid fields provided for update.' });
+      return res
+        .status(400)
+        .json({ message: 'No valid fields provided for update.' });
     }
 
     const [updateCount] = await User.update(allowedUpdates, {
@@ -65,7 +75,9 @@ const updateCurrentUser = async (req, res) => {
     });
 
     if (updateCount === 0) {
-      return res.status(404).json({ message: 'User not found or no new data to update.' });
+      return res
+        .status(404)
+        .json({ message: 'User not found or no new data to update.' });
     }
 
     res.status(200).json({ message: 'Profile updated successfully.' });
@@ -83,14 +95,21 @@ const becomePatient = async (req, res) => {
 
     if (userRoles.includes('patient')) {
       await t.rollback();
-      return res.status(409).json({ message: 'User is already registered as a patient.' });
+      return res
+        .status(409)
+        .json({ message: 'User is already registered as a patient.' });
     }
 
     // Find the 'patient' role
-    const patientRole = await Role.findOne({ where: { name: 'patient' }, transaction: t });
+    const patientRole = await Role.findOne({
+      where: { name: 'patient' },
+      transaction: t,
+    });
     if (!patientRole) {
       await t.rollback();
-      return res.status(500).json({ message: 'Patient role not found in system.' });
+      return res
+        .status(500)
+        .json({ message: 'Patient role not found in system.' });
     }
 
     // Associate user with the role and create the patient profile

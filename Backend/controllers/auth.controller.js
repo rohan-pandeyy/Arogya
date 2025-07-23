@@ -1,5 +1,13 @@
 const { validationResult } = require('express-validator');
-const { User, Role, Patient, Doctor, Staff, BlacklistToken, sequelize } = require('../models');
+const {
+  User,
+  Role,
+  Patient,
+  Doctor,
+  Staff,
+  BlacklistToken,
+  sequelize,
+} = require('../models');
 
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -7,7 +15,18 @@ const register = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { email, password, name, age, phone, gender, roles, patientProfile, doctorProfile, staffProfile } = req.body;
+  const {
+    email,
+    password,
+    name,
+    age,
+    phone,
+    gender,
+    roles,
+    patientProfile,
+    doctorProfile,
+    staffProfile,
+  } = req.body;
 
   // Use a transaction to ensure all or nothing is written to the DB
   const t = await sequelize.transaction();
@@ -17,17 +36,27 @@ const register = async (req, res) => {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       await t.rollback();
-      return res.status(409).json({ message: 'User with this email already exists.' });
+      return res
+        .status(409)
+        .json({ message: 'User with this email already exists.' });
     }
 
     // 2. Create the base user
-    const newUser = await User.create({ email, password, name, age, phone, gender }, { transaction: t });
+    const newUser = await User.create(
+      { email, password, name, age, phone, gender },
+      { transaction: t },
+    );
 
     // 3. Find the role models from the database
-    const roleInstances = await Role.findAll({ where: { name: roles }, transaction: t });
+    const roleInstances = await Role.findAll({
+      where: { name: roles },
+      transaction: t,
+    });
     if (roleInstances.length !== roles.length) {
       await t.rollback();
-      return res.status(400).json({ message: 'One or more provided roles are invalid.' });
+      return res
+        .status(400)
+        .json({ message: 'One or more provided roles are invalid.' });
     }
 
     // 4. Associate user with roles
@@ -35,21 +64,34 @@ const register = async (req, res) => {
 
     // 5. Create role-specific profiles
     if (roles.includes('patient')) {
-      await Patient.create({ id: newUser.id, ...patientProfile }, { transaction: t });
+      await Patient.create(
+        { id: newUser.id, ...patientProfile },
+        { transaction: t },
+      );
     }
     if (roles.includes('doctor')) {
       if (!doctorProfile || !doctorProfile.facilityId) {
         await t.rollback();
-        return res.status(400).json({ message: 'Doctor profile with facilityId is required.' });
+        return res
+          .status(400)
+          .json({ message: 'Doctor profile with facilityId is required.' });
       }
-      await Doctor.create({ id: newUser.id, ...doctorProfile }, { transaction: t });
+      await Doctor.create(
+        { id: newUser.id, ...doctorProfile },
+        { transaction: t },
+      );
     }
     if (roles.includes('staff')) {
       if (!staffProfile || !staffProfile.facilityId) {
         await t.rollback();
-        return res.status(400).json({ message: 'Staff profile with facilityId is required.' });
+        return res
+          .status(400)
+          .json({ message: 'Staff profile with facilityId is required.' });
       }
-      await Staff.create({ id: newUser.id, ...staffProfile }, { transaction: t });
+      await Staff.create(
+        { id: newUser.id, ...staffProfile },
+        { transaction: t },
+      );
     }
 
     // If everything is successful, commit the transaction
@@ -64,7 +106,9 @@ const register = async (req, res) => {
   } catch (error) {
     await t.rollback();
     console.error('Registration Error:', error);
-    res.status(500).json({ message: 'Internal Server Error during registration.' });
+    res
+      .status(500)
+      .json({ message: 'Internal Server Error during registration.' });
   }
 };
 

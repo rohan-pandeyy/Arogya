@@ -1,7 +1,9 @@
 # Arogya Backend
 
-This is the backend server for the Arogya application, a robust and scalable healthcare platform. It is built with Node.js, Express.js, and PostgreSQL, following a modern, role-based architecture to support various user types like patients, doctors, and staff.
-
+This is the backend server for the Arogya application, a robust and scalable
+healthcare platform. It is built with Node.js, Express.js, and PostgreSQL,
+following a modern, role-based architecture to support various user types like
+patients, doctors, and staff.
 
 ## Tech Stack
 

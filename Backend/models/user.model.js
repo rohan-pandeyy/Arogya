@@ -65,9 +65,13 @@ const User = sequelize.define(
 
 // Instance methods
 User.prototype.generateAuthToken = function () {
-  return jwt.sign({ id: this.id, email: this.email }, process.env.JWT_SECRET_KEY, {
-    expiresIn: '24h',
-  });
+  return jwt.sign(
+    { id: this.id, email: this.email },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: '24h',
+    },
+  );
 };
 
 User.prototype.comparePassword = async function (password) {

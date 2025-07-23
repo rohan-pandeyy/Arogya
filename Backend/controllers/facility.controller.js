@@ -13,7 +13,9 @@ const createFacility = async (req, res) => {
   } catch (error) {
     // Handle potential unique constraint error on facility name
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(409).json({ message: 'A facility with this name already exists.' });
+      return res
+        .status(409)
+        .json({ message: 'A facility with this name already exists.' });
     }
     console.error('Error creating facility:', error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -73,7 +75,9 @@ const updateFacility = async (req, res) => {
     });
 
     if (updateCount === 0) {
-      return res.status(404).json({ message: 'Facility not found or no new data to update.' });
+      return res
+        .status(404)
+        .json({ message: 'Facility not found or no new data to update.' });
     }
 
     res.status(200).json({ message: 'Facility updated successfully.' });
