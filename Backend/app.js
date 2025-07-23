@@ -8,6 +8,8 @@ const { syncDatabase } = require('./models');
 const userRoutes = require('./routes/user.routes');
 const hospitalRoutes = require('./routes/hospital.routes');
 const doctorRoutes = require('./routes/doctor.routes');
+const authRoutes = require('./routes/auth.routes');
+const facilityRoutes = require('./routes/facility.routes');
 
 // Test database connection
 testConnection();
@@ -41,5 +43,7 @@ app.use('/users', userRoutes);
 app.use('/hospitals', hospitalRoutes);
 app.use('/api/user', userRoutes);
 app.use('/doctors', doctorRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/facilities', facilityRoutes);
 
 module.exports = app;

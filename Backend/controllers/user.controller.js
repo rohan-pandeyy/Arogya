@@ -39,6 +39,7 @@ const getCurrentUser = async (req, res) => {
       include: [
         {
           model: Role,
+          as: 'Roles',
           attributes: ['name'],
           through: { attributes: [] }, // Don't include the join table
         },

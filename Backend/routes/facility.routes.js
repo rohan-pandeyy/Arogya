@@ -4,7 +4,7 @@ const { body } = require('express-validator');
 const facilityController = require('../controllers/facility.controller'); // We will create this
 const { protect, checkRoles } = require('../middlewares/auth.middleware');
 
-const adminOnly = [protect, checkRoles(["admin"])];
+const adminOnly = [protect, checkRoles("admin")];
 
 /**
  * @route   POST /api/facilities
