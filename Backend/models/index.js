@@ -6,7 +6,7 @@ const Staff = require('./staff.model');
 const Facility = require('./facility.model');
 const BlacklistToken = require('./blacklistToken.model');
 const PhysioSession = require('./physioSession.model');
-const SensorSessionLog = require('./sensorSessionLog.model');
+// const SensorSessionLog = require('./sensorSessionLog.model');
 const { sequelize } = require('../config/database');
 
 // --- User -> Role (Many-to-Many) ---
@@ -81,25 +81,25 @@ PhysioSession.belongsTo(Doctor, {
   as: 'therapist',
 });
 
-// Patient -> SensorSessionLog (One-to-Many)
-Patient.hasMany(SensorSessionLog, {
-  foreignKey: 'patientId',
-  as: 'sensorSessionLogs',
-});
-SensorSessionLog.belongsTo(Patient, {
-  foreignKey: 'patientId',
-  as: 'patient',
-});
+// // Patient -> SensorSessionLog (One-to-Many)
+// Patient.hasMany(SensorSessionLog, {
+//   foreignKey: 'patientId',
+//   as: 'sensorSessionLogs',
+// });
+// SensorSessionLog.belongsTo(Patient, {
+//   foreignKey: 'patientId',
+//   as: 'patient',
+// });
 
-// PhysioSession -> SensorSessionLog (One-to-Many)
-PhysioSession.hasMany(SensorSessionLog, {
-  foreignKey: 'sessionId',
-  as: 'sensorSessionLogs',
-});
-SensorSessionLog.belongsTo(PhysioSession, {
-  foreignKey: 'sessionId',
-  as: 'session',
-});
+// // PhysioSession -> SensorSessionLog (One-to-Many)
+// PhysioSession.hasMany(SensorSessionLog, {
+//   foreignKey: 'sessionId',
+//   as: 'sensorSessionLogs',
+// });
+// SensorSessionLog.belongsTo(PhysioSession, {
+//   foreignKey: 'sessionId',
+//   as: 'session',
+// });
 
 // ===============================
 // Sync Function (Only in Development)
@@ -134,7 +134,7 @@ module.exports = {
   Facility,
   BlacklistToken,
   PhysioSession,
-  SensorSessionLog,
+  // SensorSessionLog,
   syncDatabase,
   sequelize,
 };

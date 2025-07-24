@@ -70,9 +70,10 @@ const checkRoles = (...allowedRoles) => {
     // Check if the user has any of the allowed roles
     const hasPermission = allowedRoles.some(role => userRoles.includes(role));
   
-    allowedRoles.forEach(allowedRole => {
-      console.log(`  - "${allowedRole}" in userRoles:`, userRoles.includes(allowedRole));
-    });
+    // Debugging logs
+    // allowedRoles.forEach(allowedRole => {
+    //   console.log(`  - "${allowedRole}" in userRoles:`, userRoles.includes(allowedRole));
+    // });
     
     if (hasPermission) {
       next();
