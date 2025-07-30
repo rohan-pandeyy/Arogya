@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const { User, Role, Patient, Doctor, Staff, BlacklistToken, sequelize } = require('../models');
+const jwt = require('jsonwebtoken');
 
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -9,31 +10,25 @@ const register = async (req, res) => {
 
   const { email, password, name, age, phone, gender, roles, patientProfile, doctorProfile, staffProfile } = req.body;
 
-  // Use a transaction to ensure all or nothing is written to the DB
   const t = await sequelize.transaction();
 
   try {
-    // 1. Check if user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       await t.rollback();
       return res.status(409).json({ message: 'User with this email already exists.' });
     }
 
-    // 2. Create the base user
     const newUser = await User.create({ email, password, name, age, phone, gender }, { transaction: t });
 
-    // 3. Find the role models from the database
     const roleInstances = await Role.findAll({ where: { name: roles }, transaction: t });
     if (roleInstances.length !== roles.length) {
       await t.rollback();
       return res.status(400).json({ message: 'One or more provided roles are invalid.' });
     }
 
-    // 4. Associate user with roles
     await newUser.addRoles(roleInstances, { transaction: t });
 
-    // 5. Create role-specific profiles
     if (roles.includes('patient')) {
       await Patient.create({ id: newUser.id, ...patientProfile }, { transaction: t });
     }
@@ -52,13 +47,11 @@ const register = async (req, res) => {
       await Staff.create({ id: newUser.id, ...staffProfile }, { transaction: t });
     }
 
-    // If everything is successful, commit the transaction
     await t.commit();
 
-    // 6. Generate token and send response
     const token = newUser.generateAuthToken();
     const userResponse = newUser.toJSON();
-    delete userResponse.password; // Ensure password hash is not sent
+    delete userResponse.password;
 
     res.status(201).json({ user: userResponse, token });
   } catch (error) {
@@ -91,6 +84,13 @@ const login = async (req, res) => {
     const userResponse = user.toJSON();
     delete userResponse.password;
 
+    res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000,
+    });
+
     res.status(200).json({ user: userResponse, token });
   } catch (error) {
     console.error('Login Error:', error);
@@ -100,18 +100,22 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-      const token = authHeader.split(' ')[1];
-      // Set an expiration for the blacklisted token to prevent the table from growing indefinitely
-      const decoded = require('jsonwebtoken').decode(token);
-      const expiresAt = new Date(decoded.exp * 1000);
+    // ✅ FIX: Get the token from the cookie instead of the Authorization header.
+    const token = req.cookies.token;
 
-      await BlacklistToken.create({ token, expiresAt });
-      res.status(200).json({ message: 'Successfully logged out.' });
-    } else {
-      res.status(400).json({ message: 'No token provided to blacklist.' });
+    if (token) {
+      // Decode the token to get its expiration date for the blacklist
+      const decoded = jwt.decode(token);
+      if (decoded && decoded.exp) {
+        const expiresAt = new Date(decoded.exp * 1000);
+        await BlacklistToken.create({ token, expiresAt });
+      }
     }
+
+    // ✅ FIX: Clear the cookie from the browser.
+    res.clearCookie('token');
+
+    res.status(200).json({ message: 'Successfully logged out.' });
   } catch (error) {
     console.error('Logout Error:', error);
     res.status(500).json({ message: 'Internal Server Error' });

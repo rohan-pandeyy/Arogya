@@ -4,7 +4,7 @@ require('dotenv').config();
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
   protocol: 'postgres',
-  logging: false, // Set to console.log to see SQL queries
+  logging: false,
   dialectOptions: {
     ssl:
       process.env.NODE_ENV === 'production'
@@ -19,9 +19,13 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 const testConnection = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Database connection has been established successfully.');
+    console.log('✅ Database connection has been established successfully.');
+
+    // 🔥 Force this to run even in production
+    await sequelize.sync({ alter: true });
+    console.log('✅ Tables synced successfully (alter:true)');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('❌ Unable to connect to the database:', error);
   }
 };
 
