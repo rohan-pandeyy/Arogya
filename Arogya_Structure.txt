@@ -102,10 +102,12 @@
 │   ├── README.md
 │   ├── app.js
 │   ├── config/
-│   │   └── database.js
+│   │   ├── database.js
+│   │   └── test-db.js
 │   ├── controllers/
 │   │   ├── auth.controller.js
 │   │   ├── facility.controller.js
+│   │   ├── patient.controller.js
 │   │   └── user.controller.js
 │   ├── middlewares/
 │   │   └── auth.middleware.js
@@ -124,6 +126,7 @@
 │   ├── routes/
 │   │   ├── auth.routes.js
 │   │   ├── facility.routes.js
+│   │   ├── patient.routes.js
 │   │   └── user.routes.js
 │   ├── server.js
 │   └── services/
@@ -146,4 +149,4 @@
 ├── package-lock.json
 └── package.json
 
-39 directories, 108 files
+39 directories, 111 files
