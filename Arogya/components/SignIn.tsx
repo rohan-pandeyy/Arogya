@@ -22,7 +22,7 @@ export default function SignIn() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${getBaseUrl()}/users/login`, {
+      const res = await fetch(`${getBaseUrl()}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,9 +38,12 @@ export default function SignIn() {
         return;
       }
 
-      const profileRes = await fetch(`${getBaseUrl()}/users/profile`, {
+      const profileRes = await fetch(`${getBaseUrl()}/api/users/me`, {
         method: 'GET',
         credentials: 'include',
+        headers: {
+            'Authorization': `Bearer ${json.token}`
+        }
       });
 
       if (profileRes.ok) {

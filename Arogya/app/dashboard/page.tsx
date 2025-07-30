@@ -2,85 +2,103 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Avatar } from '@heroui/react';
 import { useUser } from '@/context/UserContext';
+import { getBaseUrl } from '@/lib/getBaseUrl';
 
 export default function Profile() {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const [formData, setFormData] = useState({
+    // Fields from User model
+    name: '',
     age: '',
-    address: '',
     phone: '',
-    dob: '',
+    // Fields from Patient model
+    address: '',
     bloodGroup: '',
-    diagnosis: '',
+    diagonosis: '',
     allergies: '',
   });
 
+  // This effect runs when the user object is available
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch('http://localhost:80/users/profile', {
-          method: 'GET',
-          credentials: 'include',
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setFormData((prev) => ({
-            ...prev,
-            age: data.age || '',
-            address: data.address || '',
-            phone: data.phone || '',
-            dob: data.dob?.split('T')[0] || '',
-            bloodGroup: data.bloodGroup || '',
-            diagnosis: data.diagnosis || '',
-            allergies: data.allergies || '',
-          }));
-        } else {
-          console.error('Failed to fetch profile');
-        }
-      } catch (err) {
-        console.error('Error fetching profile:', err);
-      }
-    };
-
+    // The user object from context already contains all the profile data
     if (user) {
-      fetchProfile();
+      setFormData({
+        // Populate form with data from the User model
+        name: user.name || '',
+        age: user.age !== undefined && user.age !== null ? String(user.age) : '',
+        phone: user.phone !== undefined && user.phone !== null ? String(user.phone) : '',
+        // Populate form with data from the nested Patient model
+        address: user.Patient?.address || '',
+        bloodGroup: user.Patient?.bloodGroup || '',
+        diagonosis: user.Patient?.diagonosis || '',
+        allergies: user.Patient?.allergies || '',
+      });
     }
   }, [user]);
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = async () => {
-    try {
-      const res = await fetch('http://localhost:80/users/profile', {
-        method: 'PUT',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // Separate form data for each API endpoint
+    const userPayload = {
+      name: formData.name,
+      age: formData.age,
+      phone: formData.phone,
+    };
 
-      if (res.ok) {
-        const data = await res.json();
-        alert('Changes saved!');
-        console.log('Updated user:', data.user);
+    const patientPayload = {
+      address: formData.address,
+      bloodGroup: formData.bloodGroup,
+      diagonosis: formData.diagonosis,
+      allergies: formData.allergies,
+    };
+
+    try {
+      // Use Promise.all to send both requests concurrently
+      const [userRes, patientRes] = await Promise.all([
+        // Update the base User profile
+        fetch(`${getBaseUrl()}/api/users/me`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(userPayload),
+        }),
+        // Update the Patient-specific profile
+        fetch(`${getBaseUrl()}/api/patients/me`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(patientPayload),
+        }),
+      ]);
+
+      // Check if both requests were successful
+      if (userRes.ok && patientRes.ok) {
+        alert('Profile saved successfully!');
+        // Optionally, refetch the user data to update the context
+        const updatedUserRes = await fetch(`${getBaseUrl()}/api/users/me`, { credentials: 'include' });
+        if (updatedUserRes.ok) {
+            const updatedUserData = await updatedUserRes.json();
+            setUser(updatedUserData);
+        }
       } else {
-        const err = await res.json();
-        alert('Failed to save: ' + err.message);
+        // Handle potential errors from either request
+        const userError = !userRes.ok ? await userRes.text() : '';
+        const patientError = !patientRes.ok ? await patientRes.text() : '';
+        alert(`Failed to save profile: ${userError} ${patientError}`);
       }
     } catch (error) {
       console.error('Error saving profile:', error);
-      alert('Something went wrong.');
+      alert('An unexpected error occurred.');
     }
   };
 
   const firstName = user?.name?.split(' ')[0] || '';
-  const initial = firstName.charAt(0).toUpperCase();
+  const initial = firstName ? firstName.charAt(0).toUpperCase() : '';
 
   return (
     <div className='min-h-screen p-6'>
@@ -99,7 +117,7 @@ export default function Profile() {
             name={initial}
           />
           <h2 className='text-lg font-opensans font-semibold text-foreground mt-2'>
-            {user?.name || 'Patient Name'}
+            {formData.name || 'Patient Name'}
           </h2>
           <p className='text-sm text-gray-500'>
             {formData.phone || 'Phone not set'}
@@ -113,18 +131,14 @@ export default function Profile() {
             <h3 className='font-specialGothic font-medium text-sm mb-1'>
               General Information
             </h3>
-
+            
             <div>
-              <label className='text-xs font-opensans text-foreground'>
-                Date of Birth
-              </label>
+              <label className='text-xs font-opensans'>Full Name</label>
               <Input
-                type='date'
-                name='dob'
-                value={formData.dob}
+                name='name'
+                value={formData.name}
                 onChange={handleChange}
                 size='sm'
-                className='font-opensans text-foreground font-semibold'
               />
             </div>
 
@@ -140,6 +154,20 @@ export default function Profile() {
             </div>
 
             <div>
+              <label className='text-xs font-opensans text-foreground'>
+                Phone
+              </label>
+              <Input
+                type='text' // Changed to text to allow for formatting
+                name='phone'
+                value={formData.phone}
+                onChange={handleChange}
+                className='font-opensans'
+                size='sm'
+              />
+            </div>
+            
+             <div>
               <label className='text-xs font-opensans'>Address</label>
               <Input
                 name='address'
@@ -149,20 +177,13 @@ export default function Profile() {
                 size='sm'
               />
             </div>
+          </div>
 
-            <div>
-              <label className='text-xs font-opensans text-foreground'>
-                Phone
-              </label>
-              <Input
-                type='number'
-                name='phone'
-                value={formData.phone}
-                onChange={handleChange}
-                className='font-opensans'
-                size='sm'
-              />
-            </div>
+          {/* Medical Info */}
+          <div className='bg-green-100/10 shadow-xl p-4 rounded-lg space-y-3 xl:col-span-1'>
+            <h3 className='font-specialGothic font-medium text-sm mb-1'>
+              Medical Info
+            </h3>
 
             <div>
               <label className='text-xs font-opensans text-foreground'>
@@ -177,21 +198,14 @@ export default function Profile() {
                 placeholder='e.g. B+ / O-'
               />
             </div>
-          </div>
-
-          {/* Medical Info */}
-          <div className='bg-green-100/10 shadow-xl p-4 rounded-lg space-y-3 xl:col-span-1'>
-            <h3 className='font-specialGothic font-medium text-sm mb-1'>
-              Medical Info
-            </h3>
 
             <div>
               <label className='text-xs font-opensans text-foreground'>
                 Diagnosis
               </label>
               <Input
-                name='diagnosis'
-                value={formData.diagnosis}
+                name='diagonosis' // Match backend model spelling
+                value={formData.diagonosis}
                 onChange={handleChange}
                 className='font-opensans'
                 size='sm'

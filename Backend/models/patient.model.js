@@ -21,7 +21,16 @@ const Patient = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    // Other patient-specific fields like diagnosis, allergies can go here
+    // Note: The model uses 'diagonosis', so we'll match this on the frontend.
+    diagonosis: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    // ✅ ADDED: New field to match the frontend form.
+    allergies: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
   },
   { timestamps: true },
 );

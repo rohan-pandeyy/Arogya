@@ -52,14 +52,20 @@ export default function SignUp() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
+    
+    // Add default role
+    const registrationData = {
+        ...data,
+        roles: ['patient']
+    }
 
     try {
-      const res = await fetch(`${getBaseUrl()}/users/register`, {
+      const res = await fetch(`${getBaseUrl()}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(registrationData),
         credentials: 'include',
       });
 
@@ -73,6 +79,8 @@ export default function SignUp() {
         id: json.user.id,
         name: json.user.name,
         email: json.user.email,
+        age: json.user.age || null,
+        phone: json.user.phone || null,
       });
 
       setSubmitted(json.user);
@@ -292,6 +300,17 @@ export default function SignUp() {
                     name='age'
                     type='number'
                     placeholder='Age'
+                    className='font-normal w-full px-4 py-2 text-md border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black placeholder:italic'
+                  />
+                </div>
+
+                 <div className='mb-5 w-80'>
+                  <input
+                    required
+                    id='phone'
+                    name='phone'
+                    type='text'
+                    placeholder='Phone'
                     className='font-normal w-full px-4 py-2 text-md border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black placeholder:italic'
                   />
                 </div>

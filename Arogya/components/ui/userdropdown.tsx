@@ -37,30 +37,32 @@ export const PlusIcon = (props: any) => (
 );
 
 export default function UserDropdown() {
-  const { user } = useUser();
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const router = useRouter();
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(`${getBaseUrl()}/users/logout`, {
+      // ✅ FIX: Changed the URL to the correct logout endpoint.
+      const res = await fetch(`${getBaseUrl()}/api/auth/logout`, {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include', // This is important to send the auth cookie
       });
 
       if (res.ok) {
-        setUser(null);
-        router.push('/'); // redirect to homepage
+        setUser(null); // Clear the user from the context
+        router.push('/'); // Redirect to homepage
+      } else {
+        console.error('Logout failed on the server.');
       }
     } catch (err) {
-      console.error('Logout failed', err);
+      console.error('Logout failed:', err);
     }
   };
 
   if (!user) return null;
 
   const firstName = user.name.split(' ')[0];
-  const initial = firstName.charAt(0).toUpperCase();
+  const initial = firstName ? firstName.charAt(0).toUpperCase() : '';
 
   return (
     <Dropdown
@@ -84,11 +86,6 @@ export default function UserDropdown() {
         aria-label='Profile Menu'
         className='p-3'
         disabledKeys={['profile']}
-        // onAction={(key) => {
-        //   if (key === "dashboard") router.push("/UserDashboard/dashboard");
-        //   else if (key === "settings") router.push("/settings");
-        //   else if (key === "enquire") router.push("/enquire");
-        // }}
         itemClasses={{
           base: [
             'rounded-md',
