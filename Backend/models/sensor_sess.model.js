@@ -9,19 +9,19 @@ const SensorSessionLog = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    patient_id: {
+    patient_Id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    session_id: {
+    session_Id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    start_time: {
+    start_Time: {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    end_time: {
+    end_Time: {
         type: DataTypes.DATE,
         allowNull: true,
       },
@@ -29,11 +29,11 @@ const SensorSessionLog = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    rep_count: {
+    rep_Count: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    rep_duration_ms: {
+    rep_Duration_Ms: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -41,7 +41,7 @@ const SensorSessionLog = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: true,
     },
-    quality_score: {
+    quality_Score: {
       type: DataTypes.FLOAT,
       allowNull: true,
     },
