@@ -5,26 +5,38 @@ const Doctor = require('./doctor.model');
 const Staff = require('./staff.model');
 const Facility = require('./facility.model');
 const BlacklistToken = require('./blacklistToken.model');
+const PhysioSession = require('./physio.model');
+const SensorSessionLog = require('./sensor_sess.model');
 const { sequelize } = require('../config/database');
 
-// User -> Role (Many-to-Many)
+// ===============================
+// User <-> Role (Many-to-Many)
+// ===============================
 const UserRole = sequelize.define('UserRole', {}, { timestamps: false });
 User.belongsToMany(Role, { through: UserRole });
 Role.belongsToMany(User, { through: UserRole });
 
+// ===============================
 // User -> Patient (One-to-One)
+// ===============================
 User.hasOne(Patient, { foreignKey: 'id', onDelete: 'CASCADE' });
 Patient.belongsTo(User, { foreignKey: 'id' });
 
+// ===============================
 // User -> Doctor (One-to-One)
+// ===============================
 User.hasOne(Doctor, { foreignKey: 'id', onDelete: 'CASCADE' });
 Doctor.belongsTo(User, { foreignKey: 'id' });
 
+// ===============================
 // User -> Staff (One-to-One)
+// ===============================
 User.hasOne(Staff, { foreignKey: 'id', onDelete: 'CASCADE' });
 Staff.belongsTo(User, { foreignKey: 'id' });
 
+// ===============================
 // Facility -> Doctor (One-to-Many)
+// ===============================
 Facility.hasMany(Doctor, {
   foreignKey: 'facilityId',
   as: 'doctors',
@@ -34,7 +46,9 @@ Doctor.belongsTo(Facility, {
   as: 'facility',
 });
 
+// ===============================
 // Facility -> Staff (One-to-Many)
+// ===============================
 Facility.hasMany(Staff, {
   foreignKey: 'facilityId',
   as: 'staffMembers',
@@ -45,17 +59,43 @@ Staff.belongsTo(Facility, {
 });
 
 // ===============================
+// PhysioSession Associations
+// ===============================
+
+// A Patient (User) has many PhysioSessions
+Patient.hasMany(PhysioSession, { foreignKey: 'patient_id', onDelete: 'CASCADE' });
+PhysioSession.belongsTo(Patient, { foreignKey: 'patient_id' });
+
+// A Doctor (User) has many PhysioSessions (as therapist)
+Doctor.hasMany(PhysioSession, { foreignKey: 'therapist_id', onDelete: 'SET NULL' });
+PhysioSession.belongsTo(Doctor, { foreignKey: 'therapist_id' });
+
+// ===============================
+// SensorSessionLog Associations
+// ===============================
+
+// A PhysioSession has many SensorSessionLogs
+PhysioSession.hasMany(SensorSessionLog, { foreignKey: 'session_id', onDelete: 'CASCADE' });
+SensorSessionLog.belongsTo(PhysioSession, { foreignKey: 'session_id' });
+
+// A Patient also has many SensorSessionLogs
+Patient.hasMany(SensorSessionLog, { foreignKey: 'patient_id', onDelete: 'CASCADE' });
+SensorSessionLog.belongsTo(Patient, { foreignKey: 'patient_id' });
+
+// ===============================
 // Sync Function (Only in Development)
 // ===============================
 const syncDatabase = async () => {
   try {
     if (process.env.NODE_ENV !== 'production') {
       await sequelize.sync({ alter: true });
+
       // Seed roles if they don't exist
       await Role.findOrCreate({ where: { name: 'patient' } });
       await Role.findOrCreate({ where: { name: 'doctor' } });
       await Role.findOrCreate({ where: { name: 'staff' } });
       await Role.findOrCreate({ where: { name: 'admin' } });
+
       console.log('✅ Database synced successfully (development)');
     } else {
       console.log('⚠️ Skipping sequelize.sync() in production. Use migrations instead.');
@@ -73,6 +113,8 @@ module.exports = {
   Doctor,
   Staff,
   Facility,
+  PhysioSession,
+  SensorSessionLog,
   BlacklistToken,
   syncDatabase,
   sequelize,

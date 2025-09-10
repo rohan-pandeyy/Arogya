@@ -21,7 +21,6 @@ const testConnection = async () => {
     await sequelize.authenticate();
     console.log('✅ Database connection has been established successfully.');
 
-    // 🔥 Force this to run even in production
     await sequelize.sync({ alter: true });
     console.log('✅ Tables synced successfully (alter:true)');
   } catch (error) {

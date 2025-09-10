@@ -48,12 +48,22 @@ CREATE TABLE doctor_hospitals (
 -- Exercise sessions table
 CREATE TABLE exercise_sessions (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    doctor_id INTEGER REFERENCES doctors(id),
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    doctor_id INTEGER REFERENCES doctors(id) ON DELETE SET NULL,
+
     start_time TIMESTAMP WITH TIME ZONE NOT NULL,
     end_time TIMESTAMP WITH TIME ZONE,
+
     exercise_type VARCHAR(100) NOT NULL,
+    target_reps INTEGER,
+    completed_reps INTEGER,
+    avg_extension FLOAT,
+    avg_release FLOAT,
+    range_of_motion FLOAT,
+    anomalies_count INTEGER DEFAULT 0,
+    session_duration FLOAT,
     notes TEXT,
+
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
