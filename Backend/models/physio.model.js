@@ -9,15 +9,15 @@ const PhysioSession = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    patient_Id: {
+    patientId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    therapist_Id: {
+    therapistId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    scheduled_At: {
+    scheduledAt: {
       type: DataTypes.DATE,
       allowNull: false,
     },
