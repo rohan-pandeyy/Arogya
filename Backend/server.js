@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000', // Allow requests from your frontend
-      'https://b71415fb3c10.ngrok-free.app/api/auth/register', //ngrok signup url here
+      '{ngrok url here}/api/auth/register', //ngrok signup url here
     ],
     credentials: true, // This is crucial for allowing cookies
   }),

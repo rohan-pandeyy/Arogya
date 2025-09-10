@@ -45,18 +45,6 @@ CREATE TABLE doctor_hospitals (
     PRIMARY KEY (doctor_id, hospital_id)
 );
 
--- Exercise sessions table
-CREATE TABLE exercise_sessions (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    doctor_id INTEGER REFERENCES doctors(id),
-    start_time TIMESTAMP WITH TIME ZONE NOT NULL,
-    end_time TIMESTAMP WITH TIME ZONE,
-    exercise_type VARCHAR(100) NOT NULL,
-    notes TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Sensor data table (time-series)
 CREATE TABLE sensor_data (
     id SERIAL PRIMARY KEY,
