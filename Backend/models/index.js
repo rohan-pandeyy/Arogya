@@ -5,8 +5,8 @@ const Doctor = require('./doctor.model');
 const Staff = require('./staff.model');
 const Facility = require('./facility.model');
 const BlacklistToken = require('./blacklistToken.model');
-const PhysioSession = require('./physio.model');
-const SensorSessionLog = require('./sensor_sess.model');
+const PhysioSession = require('./physioSessions.model');
+const SensorSessionLog = require('./sensorSessionLogs.model');
 const { sequelize } = require('../config/database');
 
 // ===============================
@@ -63,24 +63,24 @@ Staff.belongsTo(Facility, {
 // ===============================
 
 // A Patient (User) has many PhysioSessions
-Patient.hasMany(PhysioSession, { foreignKey: 'patient_id', onDelete: 'CASCADE' });
-PhysioSession.belongsTo(Patient, { foreignKey: 'patient_id' });
+Patient.hasMany(PhysioSession, { foreignKey: 'patientId', onDelete: 'CASCADE' });
+PhysioSession.belongsTo(Patient, { foreignKey: 'patientId' });
 
 // A Doctor (User) has many PhysioSessions (as therapist)
-Doctor.hasMany(PhysioSession, { foreignKey: 'therapist_id', onDelete: 'SET NULL' });
-PhysioSession.belongsTo(Doctor, { foreignKey: 'therapist_id' });
+Doctor.hasMany(PhysioSession, { foreignKey: 'therapistId', onDelete: 'SET NULL' });
+PhysioSession.belongsTo(Doctor, { foreignKey: 'therapistId' });
 
 // ===============================
 // SensorSessionLog Associations
 // ===============================
 
 // A PhysioSession has many SensorSessionLogs
-PhysioSession.hasMany(SensorSessionLog, { foreignKey: 'session_id', onDelete: 'CASCADE' });
-SensorSessionLog.belongsTo(PhysioSession, { foreignKey: 'session_id' });
+PhysioSession.hasMany(SensorSessionLog, { foreignKey: 'sessionId', onDelete: 'CASCADE' });
+SensorSessionLog.belongsTo(PhysioSession, { foreignKey: 'sessionId' });
 
 // A Patient also has many SensorSessionLogs
-Patient.hasMany(SensorSessionLog, { foreignKey: 'patient_id', onDelete: 'CASCADE' });
-SensorSessionLog.belongsTo(Patient, { foreignKey: 'patient_id' });
+Patient.hasMany(SensorSessionLog, { foreignKey: 'patientId', onDelete: 'CASCADE' });
+SensorSessionLog.belongsTo(Patient, { foreignKey: 'patientId' });
 
 // ===============================
 // Sync Function (Only in Development)

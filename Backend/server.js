@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const facilityRoutes = require('./routes/facility.routes');
 const patientRoutes = require('./routes/patient.routes');
+const sensorSessionLogRoutes = require('./routes/sensorSessionLog.routes');
 
 // --- Initialize Express App ---
 const app = express();

@@ -9,22 +9,19 @@ const SensorSessionLog = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
     sessionId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    startTime: {
-        type: DataTypes.DATE,
-        allowNull: false,
+    patientId: {
+      type: DataTypes.UUID,
+      allowNull: false,
     },
-    endTime: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
+    timestamp: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false,
+    },
     joint: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -37,6 +34,10 @@ const SensorSessionLog = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    sessionDuration: {
+        type: DataTypes.TIME,
+        allowNull: true,
+    },
     rom: {
       type: DataTypes.FLOAT,
       allowNull: true,
@@ -46,13 +47,13 @@ const SensorSessionLog = sequelize.define(
       allowNull: true,
     },
     stability: {
-      type: DataTypes.STRING,
+      type: DataTypes.FLOAT,
       allowNull: true,
     },
   },
   {
-    tableName: 'SensorSession',
-    timestamps: true,
+    tableName: 'SensorSessionLogs',
+    timestamps: false,
   }
 );
 
