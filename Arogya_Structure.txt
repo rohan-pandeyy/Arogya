@@ -108,6 +108,7 @@
 │   │   ├── auth.controller.js
 │   │   ├── facility.controller.js
 │   │   ├── patient.controller.js
+│   │   ├── sensorSessionLog.controller.js
 │   │   └── user.controller.js
 │   ├── middlewares/
 │   │   └── auth.middleware.js
@@ -117,9 +118,9 @@
 │   │   ├── facility.model.js
 │   │   ├── index.js
 │   │   ├── patient.model.js
-│   │   ├── physio.model.js
+│   │   ├── physioSessions.model.js
 │   │   ├── role.model.js
-│   │   ├── sensor_sess.model.js
+│   │   ├── sensorSessionLogs.model.js
 │   │   ├── sql_schema.sql
 │   │   ├── staff.model.js
 │   │   └── user.model.js
@@ -129,6 +130,7 @@
 │   │   ├── auth.routes.js
 │   │   ├── facility.routes.js
 │   │   ├── patient.routes.js
+│   │   ├── sensorSessionLog.routes.js
 │   │   └── user.routes.js
 │   ├── server.js
 │   └── services/
@@ -151,4 +153,4 @@
 ├── package-lock.json
 └── package.json
 
-39 directories, 113 files
+39 directories, 115 files
