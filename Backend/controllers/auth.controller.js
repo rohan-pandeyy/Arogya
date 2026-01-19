@@ -2,6 +2,9 @@ const { validationResult } = require('express-validator');
 const { User, Role, Patient, Doctor, Staff, BlacklistToken, sequelize } = require('../models');
 const jwt = require('jsonwebtoken');
 
+// Registers a new user with specified roles and associated profiles.
+// Uses a transaction to ensure atomicity across User, Role, and Profile tables.
+
 const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -10,6 +13,7 @@ const register = async (req, res) => {
 
   const { email, password, name, age, phone, gender, roles, patientProfile, doctorProfile, staffProfile } = req.body;
 
+  // Start a transaction to ensure all related data is created successfully or none at all
   const t = await sequelize.transaction();
 
   try {
@@ -61,6 +65,9 @@ const register = async (req, res) => {
   }
 };
 
+// Authenticates a user and issues a JWT token.
+// Sets the token in an HTTP-only cookie for security.
+
 const login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -85,10 +92,10 @@ const login = async (req, res) => {
     delete userResponse.password;
 
     res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({ user: userResponse, token });
@@ -98,13 +105,15 @@ const login = async (req, res) => {
   }
 };
 
+// Logs out the user by clearing the auth cookie.
+// Adds the current token to a blacklist to prevent further use until expiration.
+
 const logout = async (req, res) => {
   try {
-    // ✅ FIX: Get the token from the cookie instead of the Authorization header.
     const token = req.cookies.token;
 
+    // Blacklist the token if it exists
     if (token) {
-      // Decode the token to get its expiration date for the blacklist
       const decoded = jwt.decode(token);
       if (decoded && decoded.exp) {
         const expiresAt = new Date(decoded.exp * 1000);
@@ -112,7 +121,6 @@ const logout = async (req, res) => {
       }
     }
 
-    // ✅ FIX: Clear the cookie from the browser.
     res.clearCookie('token');
 
     res.status(200).json({ message: 'Successfully logged out.' });

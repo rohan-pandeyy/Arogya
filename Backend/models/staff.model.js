@@ -22,7 +22,6 @@ const Staff = sequelize.define(
         key: 'id',
       },
     },
-    // e.g., 'receptionist', 'facility-admin'
     role: { type: DataTypes.STRING, allowNull: false },
   },
   { timestamps: true },

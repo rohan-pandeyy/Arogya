@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from typing import TypedDict, List
-from fetch_sessions import fetch_sessions  # the DB function we wrote
+from fetch_sessions import fetch_sessions
 
 # Define agent state
 class AgentState(TypedDict):
@@ -26,7 +26,7 @@ prompt = ChatPromptTemplate.from_messages([
 
 # Node 1: DB fetch
 def get_sessions(state: AgentState):
-    patient_id = "7fb3e6e7-e75a-4a81-90e5-5e19a4372020"  # can pass dynamically
+    patient_id = "7fb3e6e7-e75a-4a81-90e5-5e19a4372020"
     sessions = fetch_sessions(patient_id)
     return {"sessions": sessions}
 

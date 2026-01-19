@@ -1,15 +1,12 @@
 const { Patient } = require('../models');
 
-/**
- * Updates the patient-specific profile for the currently logged-in user.
- */
+// Updates the currently authenticated patient's profile information.
+// Only updates fields that are explicitly provided in the request body, ignoring undefined ones.
 const updateCurrentPatientProfile = async (req, res) => {
   try {
-    // Whitelist fields that can be updated on the Patient model
     const { address, bloodGroup, diagonosis, allergies } = req.body;
     const patientUpdates = { address, bloodGroup, diagonosis, allergies };
 
-    // Remove any undefined fields so we don't nullify existing data
     Object.keys(patientUpdates).forEach(
       (key) => patientUpdates[key] === undefined && delete patientUpdates[key],
     );
@@ -23,8 +20,6 @@ const updateCurrentPatientProfile = async (req, res) => {
     });
 
     if (updateCount === 0) {
-      // This might happen if the user is not a patient yet.
-      // The frontend should ideally guide them to become a patient first.
       return res.status(404).json({ message: 'Patient profile not found or no new data to update.' });
     }
 

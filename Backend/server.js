@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const facilityRoutes = require('./routes/facility.routes');
 const patientRoutes = require('./routes/patient.routes');
+const agentRoutes = require("./routes/agent.routes");
 
 // --- Initialize Express App ---
 const app = express();
@@ -22,7 +23,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000', // Allow requests from your frontend
-      '{ngrok url here}/api/auth/register', //ngrok signup url here
+      'https://34757d2ff902.ngrok-free.app/api/auth/register', //ngrok signup url here
     ],
     credentials: true, // This is crucial for allowing cookies
   }),
@@ -42,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/facilities', facilityRoutes);
+app.use("/api/agent", agentRoutes);
 
 // --- Start Server ---
 const PORT = process.env.PORT || 80;

@@ -5,34 +5,30 @@ const getCurrentUser = async (req, res) => {
     const userId = req.user.id;
     const userRoles = req.user.Roles.map((role) => role.name);
 
-    // Dynamically build the list of profiles to include based on the user's roles
     const includeProfiles = [];
     if (userRoles.includes('patient')) {
       includeProfiles.push({ model: Patient });
     }
     if (userRoles.includes('doctor')) {
-      // For doctors, also include the facility they work at
       includeProfiles.push({
         model: Doctor,
         include: [{ model: Facility, as: 'facility' }],
       });
     }
     if (userRoles.includes('staff')) {
-      // For staff, also include their facility
       includeProfiles.push({
         model: Staff,
         include: [{ model: Facility, as: 'facility' }],
       });
     }
 
-    // Fetch the complete user profile with all associated role data
     const fullUserProfile = await User.findByPk(userId, {
-      attributes: { exclude: ['password'] }, // Never send the password hash
+      attributes: { exclude: ['password'] },
       include: [
         {
           model: Role,
           attributes: ['name'],
-          through: { attributes: [] }, // Don't include the join table
+          through: { attributes: [] },
         },
         ...includeProfiles,
       ],
@@ -47,11 +43,9 @@ const getCurrentUser = async (req, res) => {
 
 const updateCurrentUser = async (req, res) => {
   try {
-    // Whitelist fields that can be updated on the base User model
     const { name, age, gender, phone } = req.body;
     const allowedUpdates = { name, age, gender, phone };
 
-    // Remove any undefined fields so we don't nullify existing data
     Object.keys(allowedUpdates).forEach(
       (key) => allowedUpdates[key] === undefined && delete allowedUpdates[key],
     );
