@@ -69,7 +69,6 @@ async function fetchSessions(patientId, limit = 5) {
 async function runAgent(question, patientId = "7fb3e6e7-e75a-4a81-90e5-5e19a4372020") {
   const sessions = await fetchSessions(patientId);
 
-  // Make human-readable context
   const context = sessions.map(s => 
     `Session ${s.id} (${s.start_time.toLocaleString()} to ${s.end_time.toLocaleString()}):
     - Joint exercised: ${s.joint}
@@ -80,7 +79,6 @@ async function runAgent(question, patientId = "7fb3e6e7-e75a-4a81-90e5-5e19a4372
     - Stability: ${s.stability}`
   ).join("\n\n") || "No session data available.";
 
-  // Combine context + question
   const fullQuery = `
 Patient Exercise History:
 ${context}

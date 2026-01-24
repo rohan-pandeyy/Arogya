@@ -4,16 +4,12 @@ from langchain_core.prompts import ChatPromptTemplate
 from typing import TypedDict, List
 from fetch_sessions import fetch_sessions
 
-# Define agent state
 class AgentState(TypedDict):
     question: str
     answer: str
     sessions: List[dict]
-
-# Setup model
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
 
-# Prompt
 system_prompt = """
 You are a physiotherapist AI agent.
 Use the patient's session data to give supportive feedback.
@@ -24,13 +20,11 @@ prompt = ChatPromptTemplate.from_messages([
     ("human", "{context}\n\nNow answer: {question}")
 ])
 
-# Node 1: DB fetch
 def get_sessions(state: AgentState):
     patient_id = "7fb3e6e7-e75a-4a81-90e5-5e19a4372020"
     sessions = fetch_sessions(patient_id)
     return {"sessions": sessions}
 
-# Node 2: LLM response
 def generate_answer(state: AgentState):
     context = "\n".join([
         f"Session {s['id']} | Reps: {s['rep_count']} | ROM: {s['rom']} | Stability: {s['stability']}"
@@ -40,7 +34,6 @@ def generate_answer(state: AgentState):
     answer = chain.invoke({"context": context, "question": state["question"]}).content
     return {"answer": answer}
 
-# Build the graph
 workflow = StateGraph(AgentState)
 workflow.add_node("get_sessions", get_sessions)
 workflow.add_node("generate_answer", generate_answer)

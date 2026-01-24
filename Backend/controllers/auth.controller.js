@@ -2,9 +2,6 @@ const { validationResult } = require('express-validator');
 const { User, Role, Patient, Doctor, Staff, BlacklistToken, sequelize } = require('../models');
 const jwt = require('jsonwebtoken');
 
-// Registers a new user with specified roles and associated profiles.
-// Uses a transaction to ensure atomicity across User, Role, and Profile tables.
-
 const register = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -13,7 +10,6 @@ const register = async (req, res) => {
 
   const { email, password, name, age, phone, gender, roles, patientProfile, doctorProfile, staffProfile } = req.body;
 
-  // Start a transaction to ensure all related data is created successfully or none at all
   const t = await sequelize.transaction();
 
   try {
@@ -65,9 +61,6 @@ const register = async (req, res) => {
   }
 };
 
-// Authenticates a user and issues a JWT token.
-// Sets the token in an HTTP-only cookie for security.
-
 const login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -105,14 +98,10 @@ const login = async (req, res) => {
   }
 };
 
-// Logs out the user by clearing the auth cookie.
-// Adds the current token to a blacklist to prevent further use until expiration.
-
 const logout = async (req, res) => {
   try {
     const token = req.cookies.token;
 
-    // Blacklist the token if it exists
     if (token) {
       const decoded = jwt.decode(token);
       if (decoded && decoded.exp) {

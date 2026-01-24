@@ -1,7 +1,5 @@
 const { Patient } = require('../models');
 
-// Updates the currently authenticated patient's profile information.
-// Only updates fields that are explicitly provided in the request body, ignoring undefined ones.
 const updateCurrentPatientProfile = async (req, res) => {
   try {
     const { address, bloodGroup, diagonosis, allergies } = req.body;

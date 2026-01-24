@@ -11,7 +11,6 @@ const createFacility = async (req, res) => {
     const newFacility = await Facility.create(req.body);
     res.status(201).json(newFacility);
   } catch (error) {
-    // Handle potential unique constraint error on facility name
     if (error.name === 'SequelizeUniqueConstraintError') {
       return res.status(409).json({ message: 'A facility with this name already exists.' });
     }
@@ -41,7 +40,7 @@ const getFacilityById = async (req, res) => {
           as: 'doctors',
           include: {
             model: User,
-            attributes: ['id', 'name', 'email'], // Include doctor's base user info
+            attributes: ['id', 'name', 'email'],
           },
         },
         {
@@ -49,7 +48,7 @@ const getFacilityById = async (req, res) => {
           as: 'staffMembers',
           include: {
             model: User,
-            attributes: ['id', 'name', 'email'], // Include staff's base user info
+            attributes: ['id', 'name', 'email'],
           },
         },
       ],
